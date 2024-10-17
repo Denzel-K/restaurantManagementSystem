@@ -1,0 +1,116 @@
+// SCSS Styles for Auth Forms
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+// Main container
+.authContainer {
+  max-width: 600px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 2rem 1.75rem;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      margin-bottom: 5px;
+      color: #333;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: .85rem .65rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+
+      &:focus {
+        border-color: #333;
+        outline: none;
+      }
+    }
+
+    button {
+      padding: .6rem 1rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: auto;
+      margin-top: 1.45rem;
+      width: 60%;
+
+      &:hover {
+        background-color: #555;
+      }
+    }
+
+    p {
+      text-align: center;
+      color: #666;
+      margin-top: 1.25rem;
+      
+      span {
+        color: #007BFF;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+}
+
+@media (max-width: 768px) {
+  .authContainer {
+    margin: 30px auto;
+    padding: 15px;
+    width: 90%;
+  }
+
+  input, button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .authContainer {
+    margin: 20px auto;
+    padding: 10px;
+    width: 95%;
+  }
+
+  input, button {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+}

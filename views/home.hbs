@@ -1,0 +1,100 @@
+<main>
+  <section class="authContainer">
+    <!-- Login Form -->
+    <form id="loginForm" class="login_form">
+      <h2>Login</h2>
+      <label for="email">Email:</label>
+      <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+      
+      <button type="submit">Login</button>
+      <p>Don't have an account? <span id="showRegister">Register here</span></p>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form id="registerForm" class="register_form" style="display: none">
+      <h2>Register</h2>
+      <label for="name">Name:</label>
+      <input type="text" id="fullName" name="name" placeholder="Enter your full name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="registerEmail" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone:</label>
+      <input type="text" id="phoneNumber" name="phone" placeholder="Enter your phone number" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="registerPassword" name="password" placeholder="Create a password" required>
+
+      <button type="submit">Register</button>
+      <p>Already have an account? <span id="showLogin">Login here</span></p>
+    </form>
+  </section>
+</main>
+
+
+<script>
+  // Toggle between login and register forms
+  document.getElementById('showRegister').addEventListener('click', () => {
+    document.querySelector('.login_form').style = `display: none`;
+    document.querySelector('.register_form').style = `
+      display: flex; 
+      flex-direction: column
+    `;
+  });
+
+  document.getElementById('showLogin').addEventListener('click', () => {
+    document.querySelector('.login_form').style = `
+      display: flex; 
+      flex-direction: column
+    `;
+    document.querySelector('.register_form').style = `display: none`;
+  });
+
+  // Handle login form submission
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      window.location.href = '/dashboard';
+    } 
+    else {
+      alert(data.message);
+    }
+  });
+
+  // Handle register form submission
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('fullName').value;
+    const phone = document.getElementById('phoneNumber').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+
+    const response = await fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, password })
+    });
+    
+    const data = await response.json();
+    if (data.success) {
+      window.location.href = '/dashboard';
+    } 
+    else {
+      alert(data.message); 
+    }
+  });
+</script>

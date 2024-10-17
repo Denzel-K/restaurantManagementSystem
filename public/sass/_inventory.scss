@@ -1,0 +1,39 @@
+.inventory {
+  .stock {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      th, td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    #search {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+    }
+  }
+
+  .item-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    h3 {
+      margin-top: 0;
+    }
+    p {
+      margin: 5px 0;
+    }
+  }
+}
