@@ -104,3 +104,75 @@ module.exports.getInventory = async (_req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Add new item
+module.exports.addItem = async (req, res) => {
+  const { item_name, quantity, unit_price, reorder_level, special_notes, category } = req.body;
+
+  try {
+    console.log({item_name, quantity, unit_price, reorder_level, special_notes, category});
+
+    await db.promise().query(
+      `INSERT INTO inventory (item_name, quantity, unit_price, reorder_level, special_notes, category) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [item_name, quantity, unit_price, reorder_level, special_notes, category]
+    );
+
+    res.status(201).json({ message: 'Item added successfully!' });
+  } 
+  catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).json({ message: 'Failed to add item.' });
+  }
+};
+
+
+// Item details update
+module.exports.updateItemDetails = async (req, res) => {
+  const { id } = req.params;
+  const { quantity, unit_price, reorder_level, special_notes } = req.body;
+
+  const updateQuery = `
+    UPDATE inventory 
+    SET 
+      quantity = ?, 
+      unit_price = ?, 
+      reorder_level = ?, 
+      special_notes = ?, 
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `;
+
+  db.query(updateQuery, [quantity, unit_price, reorder_level, special_notes, id], (error, result) => {
+    if (error) {
+      console.error('Error updating item:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Item updated successfully' });
+    } else {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+  });
+};
+
+// Item deletion
+module.exports.deleteItem = async (req, res) => {
+  const { id } = req.params;
+
+  const deleteQuery = `DELETE FROM inventory WHERE id = ?`;
+
+  db.query(deleteQuery, [id], (error, result) => {
+    if (error) {
+      console.error('Error deleting item:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Item deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+  });
+};

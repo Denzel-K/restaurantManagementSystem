@@ -20,5 +20,5 @@ module.exports.getDashboard = (_req, res) => {
 }
 
 module.exports.renderInventory = async (_req, res) => {
-  res.render('inventory');
+  res.render('inventory', {pageTitle: 'Inventory'});
 }

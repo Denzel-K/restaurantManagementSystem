@@ -7,6 +7,91 @@
   <title>{{pageTitle}}</title>
 </head>
 <body>
-  {{{body}}}
+  <section class="dashContainer userDash">
+    <section class="sidebar">
+      <div class="sideLogo userLogo">
+        <span>POS</span>
+        <img src="images/menu.svg" alt="menu" class="menuOpen">
+        <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
+      </div>
+
+      <div class="pageLinks userPages">
+        {{!-- <a href="/dashboard" data-target="home">
+          <img src="images/dashboard.svg" alt="home">
+          <span>Dashboard</span>
+        </a> --}}
+
+        <a href="/inventory" data-target="home">
+          <img src="images/inventory.svg" alt="tips">
+          <span>Inventory</span>
+        </a>
+
+        <a href="#" data-target="home">
+          <img src="images/menuFood1.svg" alt="notifications">
+          <span>Menu</span>
+        </a>
+
+        <a href="#" data-target="home">
+          <img src="images/orders.svg" alt="support">
+          <span>Orders</span>
+        </a>
+
+        <a href="#" data-target="home">
+          <img src="images/logout.svg" alt="logout">
+          <span>Logout</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="dashBody">
+      <div class="dashHead">
+        <div class="currentPage">
+          {{pageTitle}}
+        </div>
+
+        <div class="profileBox userProfileBox">
+          <img src="images/userProfile.svg" alt="userProfile">
+          <span>{{username}}</span>
+        </div>
+      </div>
+      <div class="dashMain userDashMain">
+        {{{body}}}
+      </div>
+    </section>
+  </section>
 </body>
 </html>
+
+<script>
+  const menus = document.querySelectorAll('.menuOpen');
+  const closeMenus = document.querySelectorAll('.menuClose');
+  const dashboards = document.querySelectorAll('.dashContainer');
+
+  menus.forEach(menu => {
+    menu.addEventListener('click', () => {
+      menu.classList.add('hidden');
+
+      closeMenus.forEach(closeMenu => {
+        closeMenu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    });
+  });
+
+  closeMenus.forEach(closeMenu => {
+    closeMenu.addEventListener('click', () => {
+      closeMenu.classList.add('hidden');
+
+      menus.forEach(menu => {
+        menu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    })
+  })
+</script>

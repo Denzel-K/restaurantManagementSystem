@@ -1,9 +1,18 @@
 <section class="inventory">
   <div class="stock">
-    <input type="text" id="search" placeholder="Filter by category" />
+    <div class="newBox">
+      <button class="addNewItem" type="button">
+        <span>Add Item</span>
+        <img src="images/add.svg" alt="add">
+      </button>
+    </div>
+
+    <div id="category-buttons"></div>
+
     <table>
       <thead>
         <tr>
+          <th>ID</th>
           <th>Item Name</th>
           <th>Quantity</th>
           <th>Unit Price</th>
@@ -15,110 +24,79 @@
         {{!-- Table rows will be inserted here dynamically --}}
       </tbody>
     </table>
+
     <div class="pagination">
       <button id="prev">Previous</button>
+      <p>Page: <span id="current-page">1</span></p>
       <button id="next">Next</button>
     </div>
   </div>
 
-  <div class="item-details" style="display:none;">
+  <div class="item-details" style="display: none;">
     <h3>Item Details</h3>
+    
+    <form id="item-form">
+    <!-- Hidden field for item ID -->
+    <input type="hidden" id="item-id" name="item-id" />
+
     <p><strong>Item Name:</strong> <span id="item-name"></span></p>
     <p><strong>Category:</strong> <span id="item-category"></span></p>
-    <p><strong>Quantity Available:</strong> <span id="item-quantity"></span></p>
-    <p><strong>Special Notes:</strong> <span id="item-notes"></span></p>
-    <button id="back-to-stock">Back to Stock</button>
+    <p><strong>Created At:</strong> <span id="item-created-at"></span></p>
+    <p><strong>Updated At:</strong> <span id="item-updated-at"></span></p>
+
+    <label for="item-quantity"><strong>Quantity Available:</strong></label>
+    <input type="number" id="item-quantity" name="quantity" min="0" />
+
+    <label for="item-unit-price"><strong>Unit Price ($):</strong></label>
+    <input type="number" id="item-unit-price" name="unit_price" min="0" step="0.01" />
+
+    <label for="item-reorder-level"><strong>Reorder Level:</strong></label>
+    <input type="number" id="item-reorder-level" name="reorder_level" min="0" />
+
+    <label for="item-notes"><strong>Special Notes:</strong></label>
+    <textarea id="item-notes" name="special_notes" rows="3"></textarea>
+
+    <div class="modifyActions">
+      <button type="button" id="update-item">Update</button>
+      <button type="button" id="delete-item">Remove</button>
+    </div>
+
+    <button type="button" id="back-to-stock" class="backToStock">Back to Stock</button>
+  </form>
+
+  </div>
+
+  <div class="addItem" style="display: none;">
+    <h3>Add New Item</h3>
+
+    <form id="add-item-form">
+      <label for="item_name">Item Name:</label>
+      <input type="text" id="item_name" name="item_name" required />
+
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" required />
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" min="0" required />
+
+      <label for="unit-price">Unit Price:</label>
+      <input type="number" id="unit-price" name="unit-price" step="0.01" required />
+
+      <label for="reorder-level">Reorder Level:</label>
+      <input type="number" id="reorder-level" name="reorder-level" min="0" required />
+
+      <label for="special-notes">Special Notes:</label>
+      <textarea id="special-notes" name="special-notes" rows="4"></textarea>
+
+
+      <div class="addActions">
+        <button type="submit" id="submit-item">Add Item</button>
+        <button type="button" id="clear-form">Clear</button>
+      </div>
+
+      <button type="button" id="back-to-stock2" class="backToStock">Back to Stock</button>
+    </form>
   </div>
 </section>
 
-<script>
-  let currentPage = 1;
-  let itemsPerPage = 10;
-  let inventoryData = [];
-
-  // Fetch inventory data from the server
-  async function fetchInventory() {
-    try {
-      const response = await fetch('/api/inventory');
-      inventoryData = await response.json();
-      renderInventoryTable();
-    } catch (error) {
-      console.error('Error fetching inventory:', error);
-    }
-  }
-
-  // Render inventory table with pagination and filtering
-  function renderInventoryTable() {
-    const tableBody = document.getElementById('inventory-table-body');
-    tableBody.innerHTML = '';
-
-    const filteredData = filterInventoryByCategory();
-    const paginatedData = paginateInventory(filteredData);
-
-    paginatedData.forEach((item) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${item.item_name}</td>
-        <td>${item.quantity}</td>
-        <td>${item.unit_price}</td>
-        <td>${item.reorder_level}</td>
-        <td><button onclick="showItemDetails(${item.id})">Edit</button></td>
-      `;
-      tableBody.appendChild(row);
-    });
-  }
-
-  function paginateInventory(filteredData) {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(start, start + itemsPerPage);
-  }
-
-  // Filter inventory by category
-  function filterInventoryByCategory() {
-    const searchInput = document.getElementById('search').value.toLowerCase();
-    return inventoryData.filter((item) =>
-      item.category.toLowerCase().includes(searchInput)
-    );
-  }
-
-  // Show item details
-  function showItemDetails(itemId) {
-    const item = inventoryData.find((item) => item.id === itemId);
-    if (item) {
-      document.querySelector('.stock').style.display = 'none';
-      document.querySelector('.item-details').style.display = 'block';
-
-      document.getElementById('item-name').textContent = item.item_name;
-      document.getElementById('item-category').textContent = item.category;
-      document.getElementById('item-quantity').textContent = item.quantity;
-      document.getElementById('item-notes').textContent = item.special_notes;
-    }
-  }
-
-  // Back to stock list
-  document.getElementById('back-to-stock').addEventListener('click', () => {
-    document.querySelector('.stock').style.display = 'block';
-    document.querySelector('.item-details').style.display = 'none';
-  });
-
-  // Pagination buttons
-  document.getElementById('prev').addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderInventoryTable();
-    }
-  });
-
-  document.getElementById('next').addEventListener('click', () => {
-    if (currentPage * itemsPerPage < inventoryData.length) {
-      currentPage++;
-      renderInventoryTable();
-    }
-  });
-
-  // Search input event
-  document.getElementById('search').addEventListener('input', renderInventoryTable);
-
-  // Initial load
-  fetchInventory();
-</script>
+<script src="js/inventory.js"></script>

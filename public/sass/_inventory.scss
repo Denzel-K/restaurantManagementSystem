@@ -1,39 +1,241 @@
+@import 'variables';
+
 .inventory {
+  @include flexbox(column, center, center, nowrap, 20px);
+  width: 100%;
+
   .stock {
+    @include flexbox(column, center, center, nowrap, 10px);
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 1.5rem;
+
+    .newBox{
+      width: 100%;
+      @include flexbox(row, start, center);
+      
+      button{
+        border: 1.5px solid rgb(65, 83, 110);
+        @include flexbox(row, center, center);
+        padding: .45rem .75rem;
+        
+        span{
+          color: rgb(27, 66, 92);
+          font-size: 14px;
+        }
+        img{
+          width: 28px;
+          margin-left: 8px;
+        }
+
+        &:hover{
+          background-color: #ddd9d9;
+        }
+      }
+    }
+
+    #category-buttons {
+      @include flexbox(row, flex-start, center, nowrap);
+      width: 100%;
+      padding: 1.5rem 1rem;
+      gap: 10px;
+      border: 1.5px solid lightgray;
+      border-radius: 4px;
+      margin-top: 1rem;
+
+      button {
+        border: 1.5px solid lightgray;
+      }
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      th, td {
-        padding: 10px;
+      margin-top: 1rem;
+
+      thead {
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+
+      tr {
+        @media (max-width: 768px) {
+          @include flexbox(column, flex-start, stretch, nowrap);
+          margin-bottom: 1rem;
+          border: 2px solid rgb(180, 180, 180);
+          width: 100%;
+        }
+      }
+
+      th,
+      td {
+        padding: 12px;
         border: 1px solid #ddd;
+        text-align: left;
       }
+
       th {
-        background-color: #f4f4f4;
+        background-color: #f2f2f2;
+      }
+
+      td {
+        font-size: 14px;
+
+        @media (max-width: 768px) {
+          display: grid;
+          grid-template-columns: 16ch 1fr;
+          gap: 0;
+          width: 100%;
+
+          &::before {
+            content: attr(data-label);
+            font-weight: bold;
+            margin-right: 10px;
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 10px;
+          }
+        }
       }
     }
+  }
 
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
+  .pagination {
+    @include flexbox(row, space-between, center);
+    margin-top: 2rem; 
+    width: 100%;
 
-    #search {
-      margin-bottom: 10px;
-      padding: 5px;
-      width: 100%;
+    #prev, #next{
+      border: 1.5px solid gray;
+      background-color: #ccc;
     }
   }
 
   .item-details {
-    background-color: #f9f9f9;
+    @include flexbox(column, center, center);
+    width: 100%;
+    max-width: 600px;
     padding: 20px;
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
+    border-radius: 8px;
+
     h3 {
-      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
     }
-    p {
-      margin: 5px 0;
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      p {
+        margin: 0.75rem 0;
+        font-size: 14px;
+        opacity: .8;
+      }
+
+      label {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        opacity: .8;
+        font-size: 14px;
+      }
+
+      input,
+      textarea {
+        padding: .75rem .65rem;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 1.24rem;
+        opacity: .8;
+      }
+
+      .modifyActions {
+        @include flexbox(row, space-between, center);
+        width: 100%;
+        margin-top: 2rem;
+
+        button:nth-child(1) {
+          background-color: rgb(28, 151, 233);
+          color: rgb(235, 230, 230);
+        }
+        button:nth-child(2) {
+          background-color: rgb(233, 28, 96);
+          color: rgb(235, 230, 230);
+        }
+      }
     }
+  }
+
+  .addItem {
+    @include flexbox(column, center, center, nowrap, 20px);
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem 1.5rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    h3 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      p {
+        font-size: 14px;
+        margin: 0.65rem 0;
+      }
+
+      label {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: .8;
+      }
+
+      input,
+      textarea {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: .75rem .65rem;
+        font-size: 14px;
+        margin-bottom: 1.25rem;
+      }
+
+      .addActions {
+        @include flexbox(row, space-between, center);
+        width: 100%;
+        margin-top: 2rem;
+
+        button:nth-child(1) {
+          background-color: rgb(28, 151, 233);
+          color: rgb(235, 230, 230);
+        }
+
+        button:nth-child(2) {
+          background-color: rgb(233, 28, 96);
+          color: rgb(235, 230, 230);
+        }
+      }
+    }
+  }
+
+  .backToStock {
+    margin-top: 2rem;
+    background-color: rgb(101, 99, 102);
+    color: rgb(241, 237, 237);
+  }
+
+  .hidden{
+    display: none;
   }
 }

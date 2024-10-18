@@ -1,0 +1,19 @@
+@import 'variables';
+
+button{ 
+  padding: .55rem 1.5rem;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: .3s ease;
+}
+
+.actionBtn{
+  padding: .45rem .75rem;
+  border: none;
+  background-color: rgb(101, 99, 102);
+  color: rgb(236, 234, 234);
+  width: 12ch;
+}
