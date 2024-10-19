@@ -24,6 +24,7 @@ router.get('/api/menu', authController.getMenuItems);
 router.post('/api/menu', authController.addMenuItem); 
 router.put('/api/menu/:id', authController.updateMenuItem); 
 router.delete('/api/menu/:id', authController.deleteMenuItem);
+router.get('/api/menu/:id', authController.makeOrder);
 
 // Order routes
 

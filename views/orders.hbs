@@ -1,5 +1,14 @@
 <section class="orders">
-  
+  <form id="order-form">
+    <h3>Order Details</h3>
+    <p><strong>Item Name:</strong> <span id="item-name"></span></p>
+    <p><strong>Description:</strong> <span id="item-description"></span></p>
+    <p><strong>Price:</strong> <span id="item-price"></span></p>
+    <p><strong>Category:</strong> <span id="item-category"></span></p>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+    <button type="submit">Submit Order</button>
+  </form>
 </section>
 
 <script src="js/orders.js"></script>

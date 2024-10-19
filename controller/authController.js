@@ -261,3 +261,24 @@ exports.deleteMenuItem = async (req, res) => {
     }
   });
 };
+
+// Make order
+module.exports.makeOrder = async (req, res) => {
+  const itemId = req.params.id;
+
+  // Query to fetch the item from the menu table
+  db.query('SELECT * FROM menu WHERE id = ?', [itemId], (error, results) => {
+    if (error) {
+      console.error('Database query error:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    // If no results are found, return a 404
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // Send the item details as a response
+    res.json(results[0]); // results[0] contains the menu item
+  });
+}

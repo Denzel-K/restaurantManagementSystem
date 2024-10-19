@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="menuActionBtns">
             <button class="edit-item" data-id="${item.id}">Edit</button>
             <button class="delete-item" data-id="${item.id}">Delete</button>
+            <button class="make-order" data-id="${item.id}">Order</button>
           </div>
         </td>
       `;
@@ -92,6 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
       button.addEventListener("click", (e) => {
         const id = e.target.getAttribute("data-id");
         deleteMenuItem(id);
+      });
+    });
+
+    document.querySelectorAll('.make-order').forEach(button => {
+      button.addEventListener('click', () => {
+        const itemId = button.dataset.id;
+        // Redirect to the orders page with the item ID
+        window.location.href = `/orders?itemId=${itemId}`;
       });
     });
   };
