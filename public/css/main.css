@@ -404,6 +404,16 @@ body {
   display: none;
 }
 
+.dashContainer.active .sidebar {
+  width: 180px;
+}
+.dashContainer.active .sidebar .sideLogo span {
+  display: block;
+}
+.dashContainer.active .pageLinks a span {
+  display: block;
+}
+
 .inventory {
   display: flex;
   flex-direction: column;
@@ -637,14 +647,18 @@ table td {
   }
 }
 
-.menuActions button:nth-child(1) {
+.menuActions .menuActionBtns {
+  display: flex;
+  flex-direction: row;
+}
+.menuActions .menuActionBtns button:nth-child(1) {
   background-color: rgb(28, 151, 233);
   color: rgb(235, 230, 230);
 }
-.menuActions button:nth-child(2) {
+.menuActions .menuActionBtns button:nth-child(2) {
   background-color: rgb(233, 28, 96);
   color: rgb(235, 230, 230);
-  margin-left: 6px;
+  margin-left: 4px;
 }
 
 .menu {

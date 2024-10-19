@@ -30,14 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
     itemsToDisplay.forEach(item => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${item.id}</td>
-        <td>${item.item_name}</td>
-        <td>${item.description}</td>
-        <td>${item.price}</td>
-        <td>${item.category}</td>
-        <td class="menuActions">
-          <button class="edit-item" data-id="${item.id}">Edit</button>
-          <button class="delete-item" data-id="${item.id}">Delete</button>
+        <td data-label="ID">${item.id}</td>
+        <td data-label="Item Name">${item.item_name}</td>
+        <td data-label="Description">${item.description}</td>
+        <td data-label="Price">${item.price}</td>
+        <td data-label="Category">${item.category}</td>
+        <td class="menuActions" data-label="Actions">
+          <div class="menuActionBtns">
+            <button class="edit-item" data-id="${item.id}">Edit</button>
+            <button class="delete-item" data-id="${item.id}">Delete</button>
+          </div>
         </td>
       `;
       tableBody.appendChild(row);
@@ -131,31 +133,30 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Function to delete a menu item
-const deleteMenuItem = async (id) => {
-  const userConfirmed = confirm("Are you sure you want to delete this item?");
-  if (!userConfirmed) {
-    return; 
-  }
-
-  try {
-    const response = await fetch(`/api/menu/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      alert("Item deleted successfully");
-      location.assign('/menu');
-    } 
-    else {
-      console.error("Failed to delete menu item");
-      alert("Failed to delete item. Please try again.");
+  const deleteMenuItem = async (id) => {
+    const userConfirmed = confirm("Are you sure you want to delete this item?");
+    if (!userConfirmed) {
+      return; 
     }
-  } catch (error) {
-    console.error("Error deleting menu item:", error);
-    alert("An error occurred while deleting the item. Please try again.");
-  }
-};
 
+    try {
+      const response = await fetch(`/api/menu/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert("Item deleted successfully");
+        location.assign('/menu');
+      } 
+      else {
+        console.error("Failed to delete menu item");
+        alert("Failed to delete item. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting menu item:", error);
+      alert("An error occurred while deleting the item. Please try again.");
+    }
+  };
 
   // Event listeners for pagination buttons
   document.getElementById("prev-menu").addEventListener("click", () => {

@@ -249,3 +249,23 @@
     }
   }
 }
+
+.dashContainer.active{
+  .sidebar{
+    width: 180px;
+
+    .sideLogo{
+      span{
+        display: block;
+      }
+    }
+  }
+
+  .pageLinks{
+    a{
+      span{
+        display: block;
+      }
+    }
+  }
+}

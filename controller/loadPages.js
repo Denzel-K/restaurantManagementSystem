@@ -26,3 +26,7 @@ module.exports.renderInventory = async (_req, res) => {
 module.exports.renderMenu= async (_req, res) => {
   res.render('menu', {pageTitle: 'Menu'});
 }
+
+module.exports.renderOrders= async (_req, res) => {
+  res.render('orders', {pageTitle: 'Orders'});
+}
