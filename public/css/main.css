@@ -113,6 +113,58 @@ body {
     font-size: 18px;
   }
 }
+.newBox {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.newBox button {
+  border: 1.5px solid rgb(65, 83, 110);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 0.45rem 0.75rem;
+}
+.newBox button span {
+  color: rgb(27, 66, 92);
+  font-size: 14px;
+}
+.newBox button img {
+  width: 28px;
+  margin-left: 8px;
+}
+.newBox button:hover {
+  background-color: #ddd9d9;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin-top: 2rem;
+  width: 100%;
+}
+.pagination button {
+  border: 1.5px solid gray;
+  background-color: #ccc;
+}
+
+.backToStock {
+  margin-top: 2rem;
+  background-color: rgb(101, 99, 102);
+  color: rgb(241, 237, 237);
+}
+
 .dashContainer {
   display: grid;
   grid-template-columns: 1fr;
@@ -372,36 +424,6 @@ body {
   width: 100%;
   margin-top: 1.5rem;
 }
-.inventory .stock .newBox {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 0;
-}
-.inventory .stock .newBox button {
-  border: 1.5px solid rgb(65, 83, 110);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 0;
-  padding: 0.45rem 0.75rem;
-}
-.inventory .stock .newBox button span {
-  color: rgb(27, 66, 92);
-  font-size: 14px;
-}
-.inventory .stock .newBox button img {
-  width: 28px;
-  margin-left: 8px;
-}
-.inventory .stock .newBox button:hover {
-  background-color: #ddd9d9;
-}
 .inventory .stock #category-buttons {
   display: flex;
   flex-direction: row;
@@ -418,71 +440,6 @@ body {
 }
 .inventory .stock #category-buttons button {
   border: 1.5px solid lightgray;
-}
-.inventory .stock table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-@media (max-width: 768px) {
-  .inventory .stock table thead {
-    display: none;
-  }
-}
-@media (max-width: 768px) {
-  .inventory .stock table tr {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-wrap: nowrap;
-    gap: 0;
-    margin-bottom: 1rem;
-    border: 2px solid rgb(180, 180, 180);
-    width: 100%;
-  }
-}
-.inventory .stock table th,
-.inventory .stock table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-.inventory .stock table th {
-  background-color: #f2f2f2;
-}
-.inventory .stock table td {
-  font-size: 14px;
-}
-@media (max-width: 768px) {
-  .inventory .stock table td {
-    display: grid;
-    grid-template-columns: 16ch 1fr;
-    gap: 0;
-    width: 100%;
-  }
-  .inventory .stock table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    margin-right: 10px;
-    display: inline-block;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-}
-.inventory .pagination {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 0;
-  margin-top: 2rem;
-  width: 100%;
-}
-.inventory .pagination #prev, .inventory .pagination #next {
-  border: 1.5px solid gray;
-  background-color: #ccc;
 }
 .inventory .item-details {
   display: flex;
@@ -604,11 +561,6 @@ body {
   background-color: rgb(233, 28, 96);
   color: rgb(235, 230, 230);
 }
-.inventory .backToStock {
-  margin-top: 2rem;
-  background-color: rgb(101, 99, 102);
-  color: rgb(241, 237, 237);
-}
 .inventory .hidden {
   display: none;
 }
@@ -617,10 +569,12 @@ button {
   padding: 0.55rem 1.5rem;
   font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
   border: none;
   border-radius: 4px;
   transition: 0.3s ease;
+}
+button:hover {
+  cursor: pointer;
 }
 
 .actionBtn {
@@ -629,5 +583,228 @@ button {
   background-color: rgb(101, 99, 102);
   color: rgb(236, 234, 234);
   width: 12ch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+@media (max-width: 768px) {
+  table thead {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  table tr {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin-bottom: 1rem;
+    border: 2px solid rgb(180, 180, 180);
+    width: 100%;
+  }
+}
+table th,
+table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+table th {
+  background-color: #f2f2f2;
+}
+table td {
+  font-size: 14px;
+}
+@media (max-width: 768px) {
+  table td {
+    display: grid;
+    grid-template-columns: 16ch 1fr;
+    gap: 0;
+    width: 100%;
+  }
+  table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 10px;
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+}
+
+.menuActions button:nth-child(1) {
+  background-color: rgb(28, 151, 233);
+  color: rgb(235, 230, 230);
+}
+.menuActions button:nth-child(2) {
+  background-color: rgb(233, 28, 96);
+  color: rgb(235, 230, 230);
+  margin-left: 6px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
+}
+.menu .menu-stock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  max-width: 1200px;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+.menu .menu-stock #category-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  gap: 10px;
+  border: 1.5px solid lightgray;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+.menu .menu-stock #category-buttons button {
+  border: 1.5px solid lightgray;
+}
+.menu .menu-item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.menu .menu-item-details h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.menu .menu-item-details form {
+  display: flex;
+  flex-direction: column;
+}
+.menu .menu-item-details form p {
+  margin: 0.75rem 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+.menu .menu-item-details form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  opacity: 0.8;
+  font-size: 14px;
+}
+.menu .menu-item-details form input,
+.menu .menu-item-details form textarea {
+  padding: 0.75rem 0.65rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1.24rem;
+  opacity: 0.8;
+}
+.menu .menu-item-details form .modifyActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  margin-top: 2rem;
+}
+.menu .menu-item-details form .modifyActions button:nth-child(1) {
+  background-color: rgb(28, 151, 233);
+  color: rgb(235, 230, 230);
+}
+.menu .menu-item-details form .modifyActions button:nth-child(2) {
+  background-color: rgb(233, 28, 96);
+  color: rgb(235, 230, 230);
+}
+.menu .addMenuItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem 1.5rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.menu .addMenuItem h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.menu .addMenuItem form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.menu .addMenuItem form p {
+  font-size: 14px;
+  margin: 0.65rem 0;
+}
+.menu .addMenuItem form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+.menu .addMenuItem form input,
+.menu .addMenuItem form textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.75rem 0.65rem;
+  font-size: 14px;
+  margin-bottom: 1.25rem;
+}
+.menu .addMenuItem form .addActions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  margin-top: 2rem;
+}
+.menu .addMenuItem form .addActions button:nth-child(1) {
+  background-color: rgb(28, 151, 233);
+  color: rgb(235, 230, 230);
+}
+.menu .addMenuItem form .addActions button:nth-child(2) {
+  background-color: rgb(233, 28, 96);
+  color: rgb(235, 230, 230);
+}
+.menu .hidden {
+  display: none;
 }
 /*# sourceMappingURL=main.css.map */

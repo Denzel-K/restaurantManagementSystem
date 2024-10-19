@@ -1,4 +1,3 @@
-
 let currentPage = 1;
 let itemsPerPage = 10;
 let inventoryData = [];
@@ -11,7 +10,8 @@ async function fetchInventory() {
     inventoryData = await response.json();
     renderCategoryButtons();
     renderInventoryTable();
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error fetching inventory:', error);
   }
 }
@@ -52,7 +52,7 @@ function renderInventoryTable() {
   const filteredData = filterInventoryByCategory();
   const paginatedData = paginateInventory(filteredData);
 
-  paginatedData.forEach((item, index) => {
+  paginatedData.forEach((item) => {
     const row = document.createElement('tr');
     row.innerHTML = `
       <td data-label="ID">${item.id}</td>
@@ -66,6 +66,9 @@ function renderInventoryTable() {
   });
 
   document.getElementById('current-page').textContent = currentPage;
+
+  // Update pagination button states
+  updatePaginationButtons(filteredData.length);
 }
 
 // Filter inventory by selected category
@@ -82,6 +85,11 @@ function paginateInventory(filteredData) {
   return filteredData.slice(start, start + itemsPerPage);
 }
 
+// Update pagination button states based on the filtered data length
+function updatePaginationButtons(filteredCount) {
+  document.getElementById('prev').disabled = currentPage === 1;
+  document.getElementById('next').disabled = currentPage * itemsPerPage >= filteredCount;
+}
 
 // Date formating
 function formatDate(dateString) {
@@ -161,7 +169,7 @@ function showItemDetails(itemId) {
   }
 }
   
-  // Back to stock list
+// Back to stock list
 document.getElementById('back-to-stock').addEventListener('click', () => {
   document.querySelector('.stock').style = 'display: block';
   document.querySelector('.item-details').style = 'display: none';
@@ -173,6 +181,7 @@ document.querySelector('.addNewItem').addEventListener('click', () => {
   document.querySelector('.addItem').style = 'display: block';
 })
 
+//Back to stock from addForm
 document.getElementById('back-to-stock2').addEventListener('click', () => {
   document.querySelector('.stock').style = 'display: block';
   document.querySelector('.addItem').style = 'display: none';

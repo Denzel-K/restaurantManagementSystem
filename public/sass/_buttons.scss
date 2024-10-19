@@ -4,10 +4,13 @@ button{
   padding: .55rem 1.5rem;
   font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
   border: none;
   border-radius: 4px;
   transition: .3s ease;
+
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .actionBtn{

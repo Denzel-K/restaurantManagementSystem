@@ -176,3 +176,88 @@ module.exports.deleteItem = async (req, res) => {
     }
   });
 };
+
+// Fetch all menu items
+exports.getMenuItems = async (_req, res) => {
+  try {
+    db.query('SELECT * FROM menu', (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error fetching menu items' });
+      }
+
+      res.json(results);
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Add a new menu item
+exports.addMenuItem = async (req, res) => {
+  const { item_name, description, price, category } = req.body;
+
+  try {
+    await db.promise().query(
+      `INSERT INTO menu (item_name, description, price, category) 
+       VALUES (?, ?, ?, ?)`,
+      [item_name, description, price, category]
+    );
+
+    res.status(201).json({ message: 'Menu item added successfully!' });
+  } catch (error) {
+    console.error('Error adding menu item:', error);
+    res.status(500).json({ message: 'Failed to add menu item.' });
+  }
+};
+
+// Update a menu item
+exports.updateMenuItem = async (req, res) => {
+  const { id } = req.params;
+  const { item_name, description, price, category } = req.body;
+
+  const updateQuery = `
+    UPDATE menu 
+    SET 
+      item_name = ?, 
+      description = ?, 
+      price = ?, 
+      category = ?,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `;
+
+  db.query(updateQuery, [item_name, description, price, category, id], (error, result) => {
+    if (error) {
+      console.error('Error updating menu item:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Menu item updated successfully' });
+    } else {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+  });
+};
+
+// Delete a menu item
+exports.deleteMenuItem = async (req, res) => {
+  const { id } = req.params;
+
+  const deleteQuery = `DELETE FROM menu WHERE id = ?`;
+
+  db.query(deleteQuery, [id], (error, result) => {
+    if (error) {
+      console.error('Error deleting menu item:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Menu item deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+  });
+};

@@ -1,0 +1,63 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  thead {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  tr {
+    @media (max-width: 768px) {
+      @include flexbox(column, flex-start, stretch, nowrap);
+      margin-bottom: 1rem;
+      border: 2px solid rgb(180, 180, 180);
+      width: 100%;
+    }
+  }
+
+  th,
+  td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    font-size: 14px;
+
+    @media (max-width: 768px) {
+      display: grid;
+      grid-template-columns: 16ch 1fr;
+      gap: 0;
+      width: 100%;
+
+      &::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        display: inline-block;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.menuActions{
+  button:nth-child(1) {
+    background-color: rgb(28, 151, 233);
+    color: rgb(235, 230, 230);
+  }
+  button:nth-child(2) {
+    background-color: rgb(233, 28, 96);
+    color: rgb(235, 230, 230);
+    margin-left: 6px;
+  }
+}

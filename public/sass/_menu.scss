@@ -1,15 +1,15 @@
 @import 'variables';
 
-.inventory {
+.menu {
   @include flexbox(column, center, center, nowrap, 20px);
   width: 100%;
 
-  .stock {
+  .menu-stock {
     @include flexbox(column, center, center, nowrap, 10px);
     max-width: 1200px;
     width: 100%;
     margin-top: 1.5rem;
-    
+  
     #category-buttons {
       @include flexbox(row, flex-start, center, nowrap);
       width: 100%;
@@ -25,7 +25,7 @@
     }
   }
 
-  .item-details {
+  .menu-item-details {
     @include flexbox(column, center, center);
     width: 100%;
     max-width: 600px;
@@ -83,7 +83,7 @@
     }
   }
 
-  .addItem {
+  .addMenuItem {
     @include flexbox(column, center, center, nowrap, 20px);
     width: 100%;
     max-width: 600px;
@@ -141,8 +141,8 @@
       }
     }
   }
-
-  .hidden{
+  
+  .hidden {
     display: none;
   }
 }
