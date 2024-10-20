@@ -28,5 +28,5 @@ module.exports.renderMenu= async (_req, res) => {
 }
 
 module.exports.renderOrders= async (_req, res) => {
-  res.render('orders', {pageTitle: 'Orders'});
+  res.render('orders', {pageTitle: 'Order History'});
 }

@@ -68,7 +68,7 @@
     const data = await response.json();
     if (data.token) {
       localStorage.setItem('token', data.token);
-      window.location.href = '/dashboard';
+      window.location.href = '/menu';
     } 
     else {
       alert(data.message);
@@ -91,7 +91,7 @@
     
     const data = await response.json();
     if (data.success) {
-      window.location.href = '/dashboard';
+      window.location.href = '/menu';
     } 
     else {
       alert(data.message); 

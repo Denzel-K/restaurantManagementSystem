@@ -20,3 +20,18 @@ button{
   color: rgb(236, 234, 234);
   width: 12ch;
 }
+
+.orderActioBtn{
+  padding: .45rem .75rem;
+  border: none;
+  background-color: rgb(75, 228, 108);
+  color: rgb(26, 25, 25);
+}
+
+.orderReceiptView{
+  padding: .45rem .75rem;
+  border: none;
+  background-color: rgb(75, 205, 228);
+  color: rgb(26, 25, 25);
+  margin-left: 6px;
+}

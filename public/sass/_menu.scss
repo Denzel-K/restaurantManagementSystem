@@ -141,6 +141,109 @@
       }
     }
   }
+
+  .orderContainer {
+    @include flexbox(column, center, center);
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    .backBox{
+      width: 100%;
+      padding-bottom: 1rem 0;
+      @include flexbox(row, end, center);
+
+      button{
+        border: 1.6px solid gray;
+        color: black;
+
+        &:hover{
+          background-color: #ccc;
+        }
+      }
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      .order-item{
+        @include flexbox(row, space-between, center);
+        width: 100%;
+        border-bottom: 1.5px solid rgb(214, 210, 210);
+        padding-bottom: .5rem;
+        margin-bottom: 1rem;
+
+        .orderItemDetails{
+          p {
+            margin: 0.75rem 0;
+            font-size: 14px;
+            opacity: .8;
+          }
+    
+          .quantityField{
+            @include flexbox(row, start, center);
+            margin-top: .75rem;
+    
+            label {
+              margin-bottom: 5px;
+              opacity: .8;
+              font-size: 14px;
+              font-weight: 600;
+            }
+        
+            input {
+              padding: .45rem .65rem;
+              font-size: 14px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              opacity: .8;
+              margin-left: 1rem;
+              width: 10ch;
+            }
+          }
+        }
+
+        button{
+          background-color: rgb(228, 27, 87);
+          padding: .45rem .8rem;
+          color: rgb(247, 240, 240);
+        }
+      }
+
+      .payment-method{
+        margin-top: 1.5rem;
+
+        p{
+          margin-bottom: .5rem;
+          font-size: 14px;
+        }
+
+        label:nth-child(3), label:nth-child(4){
+          margin-left: 1rem;
+        }
+      }
+
+      .totalPriceBox{
+        margin-top: 1.5rem;
+
+      }
+
+      button{
+        background-color: rgb(28, 151, 233);
+        color: rgb(247, 240, 240);
+        margin-top: 2rem;
+      }
+    }
+  }
   
   .hidden {
     display: none;

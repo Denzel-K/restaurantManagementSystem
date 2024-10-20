@@ -24,9 +24,14 @@ router.get('/api/menu', authController.getMenuItems);
 router.post('/api/menu', authController.addMenuItem); 
 router.put('/api/menu/:id', authController.updateMenuItem); 
 router.delete('/api/menu/:id', authController.deleteMenuItem);
-router.get('/api/menu/:id', authController.makeOrder);
+//router.get('/api/menu/:id', authController.makeOrder);
+
+router.get('/api/menu/:itemId', authController.fetchItemDetails);
+router.post('/api/orders', authController.placeOrder);
 
 // Order routes
-
+router.get('/api/orders', authController.fetchOrders);
+router.put('/api/orders/:id', authController.updateOrderStatus);
+router.get('/api/orders/:orderId/receipt', authController.getReceipt);
 
 module.exports = router;

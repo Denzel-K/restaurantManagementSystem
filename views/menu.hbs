@@ -1,8 +1,13 @@
 <section class="menu">
   <div class="menu-stock">
-    <div class="newBox">
+    <div class="newBox menuNewBox">
       <button class="addNewMenuItem" type="button">
         <span>Add Item</span>
+        <img src="images/add.svg" alt="add">
+      </button>
+
+      <button class="newOrder" type="button">
+        <span>New order</span>
         <img src="images/add.svg" alt="add">
       </button>
     </div>
@@ -79,6 +84,48 @@
       <button type="button" id="back-to-menu2" class="backToStock">Back to Menu</button>
     </form>
   </div>
+
+  <div class="orderContainer" style="display: none;">
+    <div class="backBox">
+      <button type="button" class="backToMenuItems">
+        Back
+      </button>
+    </div>
+
+    <form id="order-form">
+      <h3>New Order</h3>
+      
+      <!-- Dynamically added items will appear here -->
+      <div class="order-items"></div>
+
+      <div class="payment-method">
+        <p><strong>Select Payment Method:</strong></p>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="cash" required> Cash
+        </label>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="card" required> Card
+        </label>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="mobile" required> Mobile
+        </label>
+      </div>
+
+      <div class="totalPriceBox">
+        <p><strong>Total: </strong><span class="totalAmount"></span></p>
+      </div>
+      
+      <button type="submit">Submit Order</button>
+    </form>
+  </div>
+
+  <div class="processOrderBox" style="display: none;">
+    <button type="button">Process</button>
+  </div>
+
 </section>
 
 <script src="js/menu.js"></script>

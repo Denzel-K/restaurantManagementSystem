@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `payment_method` ENUM('cash', 'card', 'mobile') NOT NULL,
   `status` ENUM('pending', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );
 
@@ -63,12 +64,12 @@ CREATE TABLE IF NOT EXISTS `orders` (
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `order_id` INT NOT NULL,
-  `inventory_id` INT NOT NULL, -- reference to inventory table
+  `menu_id` INT NOT NULL,
   `quantity` INT NOT NULL,
   `unit_price` DECIMAL(10, 2) NOT NULL,
   `total_price` DECIMAL(10, 2) AS (`quantity` * `unit_price`) STORED,
   FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`),
-  FOREIGN KEY (`inventory_id`) REFERENCES `inventory`(`id`)
+  FOREIGN KEY (`menu_id`) REFERENCES `menu`(`id`)
 );
 
 -- Insert some test data

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const itemsPerPage = 10;
   let menuItems = [];
   let filteredItems = [];
+  let orderItems = [];
 
   // Function to fetch menu items from the server
   const fetchMenuItems = async () => {
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPagination();
   };
 
-  // Function to attach event listeners to edit and delete buttons
+  // Function to attach event listeners to edit, delete, and order buttons
   const attachEventListeners = () => {
     document.querySelectorAll(".edit-item").forEach(button => {
       button.addEventListener("click", (e) => {
@@ -96,11 +97,39 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
+    // Disable all order buttons initially
+    const orderButtons = document.querySelectorAll('.make-order');
+    orderButtons.forEach(button => button.style.display = 'none');
+
+    // Handle 'Make Order' button clicks
     document.querySelectorAll('.make-order').forEach(button => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
+        console.log("Initiating order placement");
         const itemId = button.dataset.id;
-        // Redirect to the orders page with the item ID
-        window.location.href = `/orders?itemId=${itemId}`;
+
+        // Fetch item details based on itemId
+        const itemDetails = await fetchItemDetails(itemId);
+        
+        if (!itemDetails) {
+          alert('Error fetching item details.');
+          return;
+        }
+
+        // Add item details to orderItems array
+        orderItems.push({
+          id: itemDetails.id,
+          name: itemDetails.item_name,
+          description: itemDetails.description,
+          price: itemDetails.price,
+          category: itemDetails.category,
+          quantity: 1
+        });
+
+        // Update the order form with selected items
+        //updateOrderForm();
+
+        // Show the order form (orderContainer)
+        //document.querySelector('.orderContainer').style.display = 'block';
       });
     });
   };
@@ -248,6 +277,254 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector('.addMenuItem').style = 'display: none';
   });
 
+  // -> ORDERS
+  // Initiate order
+  document.querySelector('.newOrder').addEventListener('click', () => {
+    // Enable all order buttons
+    const orderButtons = document.querySelectorAll('.make-order');
+    orderButtons.forEach(button => button.style.display = 'block');
+  
+    // Allow selection of items
+    const menuTableRows = document.querySelectorAll('#menu-table-body tr');
+    menuTableRows.forEach(row => {
+      row.addEventListener('click', function() {
+        this.classList.toggle('selected');
+      });
+    });
+  
+    // Make 'Process' button visible
+    document.querySelector('.processOrderBox').style.display = 'block';
+  });
+
+  // Fetch item details from server
+  async function fetchItemDetails(itemId) {
+    try {
+      const response = await fetch(`/api/menu/${itemId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } 
+    catch (error) {
+      console.error('Error fetching item details:', error);
+      return null;
+    }
+  }
+
+  // Update the order form with selected items
+  function updateOrderForm() {
+    const orderForm = document.getElementById('order-form');
+    const itemContainer = document.createElement('div');
+    itemContainer.className = 'order-items';
+    
+    // Clear existing items in the form
+    orderForm.querySelector('.order-items')?.remove();
+    
+    // Loop through selected items and append them to the form
+    orderItems.forEach((item, index) => {
+      const itemHTML = `
+        <div class="order-item" data-index="${index}">
+          <p><strong>Item Name:</strong> ${item.name}</p>
+          <p><strong>Description:</strong> ${item.description}</p>
+          <p><strong>Price:</strong> ${item.price}</p>
+          <p><strong>Category:</strong> ${item.category}</p>
+          <label for="quantity-${index}">Quantity:</label>
+          <input type="number" id="quantity-${index}" name="quantity-${index}" min="1" value="${item.quantity}" required>
+          <button type="button" class="remove-item" data-index="${index}">Remove</button>
+        </div>
+      `;
+      itemContainer.innerHTML += itemHTML;
+    });
+
+    // Append itemContainer to the form
+    orderForm.appendChild(itemContainer);
+
+    // Add event listeners for quantity updates and item removal
+    document.querySelectorAll('.remove-item').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const index = button.dataset.index;
+        removeItemFromOrder(index);
+      });
+    });
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const index = input.id.split('-')[1]; // Extract index from input ID
+        orderItems[index].quantity = input.value;
+      });
+    });
+  }
+
+  // Remove an item from the order
+  function removeItemFromOrder(index) {
+    orderItems.splice(index, 1); // Remove item from array
+    updateOrderForm(); // Update the form
+  }
+
+  // Process order
+  const processOrder = document.querySelector('.processOrderBox button');
+
+  processOrder.addEventListener('click', () => {
+    const selectedItems = document.querySelectorAll('#menu-table-body tr.selected');
+    const orderContainer = document.querySelector('.orderContainer .order-items');
+    document.querySelector('.menu-stock').style.display = 'none';
+    processOrder.style.display = 'none';
+
+    // Clear previous order items
+    orderContainer.innerHTML = '';
+
+    // Add selected items to the order container
+    selectedItems.forEach(item => {
+      const itemName = item.querySelector('td:nth-child(2)').textContent;
+      const itemPrice = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace(/[^0-9.-]+/g,"")); // Ensure price is a number
+
+      const orderItem = `
+        <div class="order-item">
+          <div class="orderItemDetails">
+            <p><strong>${itemName}:</strong> $<span class="item-price">${itemPrice.toFixed(2)}</span></p>
+            <div class="quantityField">
+              <label for="quantity-${itemName}">Quantity:</label>
+              <input type="number" class="quantity-input" id="quantity-${itemName}" name="quantity-${itemName}" value="1" min="1" />
+            </div>
+          </div>
+          
+          <button class="remove-item">Remove</button>
+        </div>
+      `;
+
+      orderContainer.innerHTML += orderItem;
+    });
+
+    // Show the order container
+    document.querySelector('.orderContainer').style.display = 'block';
+
+    // Add event listeners for the remove buttons
+    addRemoveListeners();
+
+    // Calculate total amount after adding items
+    updateTotalAmount();
+  });
+
+  // Function to add remove listeners to each order item
+  function addRemoveListeners() {
+    const removeButtons = document.querySelectorAll('.remove-item');
+
+    removeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const orderItem = button.closest('.order-item'); 
+        if (orderItem) {
+          orderItem.remove(); 
+          updateTotalAmount(); 
+        }
+      });
+    });
+
+    // Add event listeners to quantity inputs to update total amount on change
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+
+    quantityInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        updateTotalAmount();
+      });
+    });
+  }
+
+  // Function to update the total amount
+  function updateTotalAmount() {
+    const orderItems = document.querySelectorAll('.order-item');
+    let total = 0;
+
+    orderItems.forEach(item => {
+      const priceElement = item.querySelector('.item-price');
+      const quantityInput = item.querySelector('.quantity-input');
+
+      const price = parseFloat(priceElement.textContent);
+      const quantity = parseInt(quantityInput.value, 10);
+
+      total += price * quantity; // Calculate total
+    });
+
+    // Update the total amount displayed
+    document.querySelector('.totalAmount').textContent = `$${total.toFixed(2)}`;
+  }
+
+  // Back to menu from order processing
+  document.querySelector('.backToMenuItems').addEventListener('click', () => {
+    document.querySelector('.orderContainer').style.display = 'none';
+    document.querySelector('.menu-stock').style.display = 'block';
+    processOrder.style.display = 'block';
+  })
+
+  // Handle form submission
+  document.getElementById('order-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    // Collect the order items
+    let orderItems = [];
+
+    document.querySelectorAll('.order-item').forEach(orderItem => {
+      const itemName = orderItem.querySelector('strong').textContent;
+      
+      // Use a more specific selector for price if possible
+      const priceElement = orderItem.querySelector('p:nth-child(1)');
+      const quantityInput = orderItem.querySelector('input[type="number"]');
+      
+      // Ensure priceElement exists before accessing textContent
+      if (!priceElement) {
+        console.error('Price element not found for item:', itemName);
+        return; // Exit if the price element is not found
+      }
+  
+      const priceText = priceElement.textContent;
+      const quantity = parseInt(quantityInput.value, 10);
+      
+      // Parse price from the string (e.g., "$12.34" to 12.34)
+      const price = parseFloat(priceText.replace(/[^0-9.-]+/g,"")); // This regex removes any non-numeric characters
+  
+      if (quantity > 0) {
+        orderItems.push({
+          itemName,
+          price,   
+          quantity
+        });
+      }
+    });
+  
+    // Check if there are any order items
+    if (orderItems.length === 0) {
+      alert('Please select at least one item with a valid quantity.');
+      return;
+    }
+  
+    // Collect the selected payment method
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+  
+    // Send order details to the server
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderItems, paymentMethod }),
+      });
+  
+      if (response.ok) {
+        alert('Order placed successfully!');
+        location.assign('/menu');
+      } 
+      else {
+        const errorText = await response.text();
+        console.error('Failed to place order:', errorText);
+      }
+    } 
+    catch (error) {
+      console.error('Error placing order:', error);
+    }
+  });
+  
   // Initial fetch of menu items
   fetchMenuItems();
 });

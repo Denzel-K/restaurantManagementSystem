@@ -141,6 +141,13 @@ body {
   }
 }
 
+.menuNewBox{
+  display: flex; 
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .pagination {
   @include flexbox(row, space-between, center);
   margin-top: 2rem;
@@ -156,4 +163,21 @@ body {
   margin-top: 2rem;
   background-color: rgb(101, 99, 102);
   color: rgb(241, 237, 237);
+}
+
+.selected {
+  background-color: #cce5ff; 
+  color: #004085;
+}
+
+.processOrderBox{
+  margin-top: 1.5rem;
+  width: 100%;
+
+  button{
+    width: 100%;
+    font-size: .85rem;
+    color: black;
+    background-color: rgb(46, 216, 145);
+  }
 }
