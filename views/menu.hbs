@@ -1,131 +1,211 @@
-<section class="menu">
-  <div class="menu-stock">
-    <div class="newBox menuNewBox">
-      <button class="addNewMenuItem" type="button">
-        <span>Add Item</span>
-        <img src="images/add.svg" alt="add">
-      </button>
-
-      <button class="newOrder" type="button">
-        <span>New order</span>
-        <img src="images/add.svg" alt="add">
-      </button>
+<section class="dashContainer userDash">
+  <section class="sidebar">
+    <div class="sideLogo userLogo">
+      <span>FAMIKE PARK</span>
+      <img src="images/menu.svg" alt="menu" class="menuOpen">
+      <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
     </div>
 
-    <div id="category-buttons"></div>
+    <div class="pageLinks userPages">
+      <a href="/inventory" data-target="home">
+        <img src="images/inventory.svg" alt="tips">
+        <span>Inventory</span>
+      </a>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Item Name</th>
-          <th>Description</th>
-          <th>Price ($)</th>
-          <th>Category</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="menu-table-body">
-        {{!-- Menu table rows will be inserted here dynamically --}}
-      </tbody>
-    </table>
+      <a href="/menu" data-target="home">
+        <img src="images/menuFood1.svg" alt="notifications">
+        <span>Menu</span>
+      </a>
 
-    <div class="pagination">
-      <button id="prev-menu">Previous</button>
-      <p>Page: <span id="current-menu-page">1</span></p>
-      <button id="next-menu">Next</button>
+      <a href="/orders" data-target="home">
+        <img src="images/orders.svg" alt="support">
+        <span>Orders</span>
+      </a>
+
+      <a href="#" data-target="home">
+        <img src="images/logout.svg" alt="logout">
+        <span>Logout</span>
+      </a>
     </div>
-  </div>
+  </section>
 
-  <div class="menu-item-details" style="display: none;">
-    <h3>Menu Item Details</h3>
-    
-    <form id="menu-item-form">
-      <input type="hidden" id="menu-item-id" name="menu-item-id" />
-
-      <p><strong>Item Name:</strong> <span id="menu-item-name"></span></p>
-      <p><strong>Category:</strong> <span id="menu-item-category"></span></p>
-      <p><strong>Description:</strong></p>
-      <textarea id="menu-item-description" name="description"></textarea>
-
-      <label for="menu-item-price"><strong>Price ($):</strong></label>
-      <input type="number" id="menu-item-price" name="price" step="0.01" min="0" />
-
-      <div class="modifyActions">
-        <button type="button" id="update-menu-item">Update</button>
-        <button type="button" id="delete-menu-item">Remove</button>
+  <section class="dashBody">
+    <div class="dashHead">
+      <div class="currentPage">
+        {{pageTitle}}
       </div>
 
-      <button type="button" id="back-to-menu" class="backToStock">Back to Menu</button>
-    </form>
-  </div>
-
-  <div class="addMenuItem" style="display: none;">
-    <h3>Add New Menu Item</h3>
-
-    <form id="add-menu-item-form">
-      <label for="menu-item-name">Item Name:</label>
-      <input type="text" id="menu-item-name" name="menu-item-name" required />
-
-      <label for="menu-item-category">Category:</label>
-      <input type="text" id="menu-item-category" name="menu-item-category" required />
-
-      <label for="menu-item-description">Description:</label>
-      <textarea id="menu-item-description" name="menu-item-description" rows="3" required></textarea>
-
-      <label for="menu-item-price">Price ($):</label>
-      <input type="number" id="menu-item-price" name="menu-item-price" step="0.01" required />
-
-      <div class="addActions">
-        <button type="submit" id="submit-menu-item">Add Menu Item</button>
-        <button type="button" id="clear-menu-form">Clear</button>
+      <div class="profileBox userProfileBox">
+        <img src="images/userProfile.svg" alt="userProfile">
+        <span>{{email}}</span>
       </div>
-
-      <button type="button" id="back-to-menu2" class="backToStock">Back to Menu</button>
-    </form>
-  </div>
-
-  <div class="orderContainer" style="display: none;">
-    <div class="backBox">
-      <button type="button" class="backToMenuItems">
-        Back
-      </button>
     </div>
+    <div class="dashMain userDashMain">
+      <section class="menu">
+        <div class="menu-stock">
+          <div class="newBox menuNewBox">
+            <button class="addNewMenuItem" type="button">
+              <span>Add Item</span>
+              <img src="images/add.svg" alt="add">
+            </button>
 
-    <form id="order-form">
-      <h3>New Order</h3>
-      
-      <!-- Dynamically added items will appear here -->
-      <div class="order-items"></div>
+            <button class="newOrder" type="button">
+              <span>New order</span>
+              <img src="images/add.svg" alt="add">
+            </button>
+          </div>
 
-      <div class="payment-method">
-        <p><strong>Select Payment Method:</strong></p>
+          <div id="category-buttons"></div>
 
-        <label>
-          <input type="radio" name="paymentMethod" value="cash" required> Cash
-        </label>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Price ($)</th>
+                <th>Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="menu-table-body">
+              {{!-- Menu table rows will be inserted here dynamically --}}
+            </tbody>
+          </table>
 
-        <label>
-          <input type="radio" name="paymentMethod" value="card" required> Card
-        </label>
+          <div class="pagination">
+            <button id="prev-menu">Previous</button>
+            <p>Page: <span id="current-menu-page">1</span></p>
+            <button id="next-menu">Next</button>
+          </div>
+        </div>
 
-        <label>
-          <input type="radio" name="paymentMethod" value="mobile" required> Mobile
-        </label>
-      </div>
+        <div class="menu-item-details" style="display: none;">
+          <h3>Menu Item Details</h3>
+          
+          <form id="menu-item-form">
+            <input type="hidden" id="menu-item-id" name="menu-item-id" />
 
-      <div class="totalPriceBox">
-        <p><strong>Total: </strong><span class="totalAmount"></span></p>
-      </div>
-      
-      <button type="submit">Submit Order</button>
-    </form>
-  </div>
+            <p><strong>Item Name:</strong> <span id="menu-item-name"></span></p>
+            <p><strong>Category:</strong> <span id="menu-item-category"></span></p>
+            <p><strong>Description:</strong></p>
+            <textarea id="menu-item-description" name="description"></textarea>
 
-  <div class="processOrderBox" style="display: none;">
-    <button type="button">Process</button>
-  </div>
+            <label for="menu-item-price"><strong>Price ($):</strong></label>
+            <input type="number" id="menu-item-price" name="price" step="0.01" min="0" />
 
-</section>
+            <div class="modifyActions">
+              <button type="button" id="update-menu-item">Update</button>
+              <button type="button" id="delete-menu-item">Remove</button>
+            </div>
+
+            <button type="button" id="back-to-menu" class="backToStock">Back to Menu</button>
+          </form>
+        </div>
+
+        <div class="addMenuItem" style="display: none;">
+          <h3>Add New Menu Item</h3>
+
+          <form id="add-menu-item-form">
+            <label for="menu-item-name">Item Name:</label>
+            <input type="text" id="menu-item-name" name="menu-item-name" required />
+
+            <label for="menu-item-category">Category:</label>
+            <input type="text" id="menu-item-category" name="menu-item-category" required />
+
+            <label for="menu-item-description">Description:</label>
+            <textarea id="menu-item-description" name="menu-item-description" rows="3" required></textarea>
+
+            <label for="menu-item-price">Price ($):</label>
+            <input type="number" id="menu-item-price" name="menu-item-price" step="0.01" required />
+
+            <div class="addActions">
+              <button type="submit" id="submit-menu-item">Add Menu Item</button>
+              <button type="button" id="clear-menu-form">Clear</button>
+            </div>
+
+            <button type="button" id="back-to-menu2" class="backToStock">Back to Menu</button>
+          </form>
+        </div>
+
+        <div class="orderContainer" style="display: none;">
+          <div class="backBox">
+            <button type="button" class="backToMenuItems">
+              Back
+            </button>
+          </div>
+
+          <form id="order-form">
+            <h3>New Order</h3>
+            
+            <!-- Dynamically added items will appear here -->
+            <div class="order-items"></div>
+
+            <div class="payment-method">
+              <p><strong>Select Payment Method:</strong></p>
+
+              <label>
+                <input type="radio" name="paymentMethod" value="cash" required> Cash
+              </label>
+
+              <label>
+                <input type="radio" name="paymentMethod" value="card" required> Card
+              </label>
+
+              <label>
+                <input type="radio" name="paymentMethod" value="mobile" required> Mobile
+              </label>
+            </div>
+
+            <div class="totalPriceBox">
+              <p><strong>Total: </strong><span class="totalAmount"></span></p>
+            </div>
+            
+            <button type="submit">Submit Order</button>
+          </form>
+        </div>
+
+        <div class="processOrderBox" style="display: none;">
+          <button type="button">Process</button>
+        </div>
+
+      </section>
+    </div>
+  </section>
+</section> 
 
 <script src="js/menu.js"></script>
+
+<script>
+  const menus = document.querySelectorAll('.menuOpen');
+  const closeMenus = document.querySelectorAll('.menuClose');
+  const dashboards = document.querySelectorAll('.dashContainer');
+
+  menus.forEach(menu => {
+    menu.addEventListener('click', () => {
+      menu.classList.add('hidden');
+
+      closeMenus.forEach(closeMenu => {
+        closeMenu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    });
+  });
+
+  closeMenus.forEach(closeMenu => {
+    closeMenu.addEventListener('click', () => {
+      closeMenu.classList.add('hidden');
+
+      menus.forEach(menu => {
+        menu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    })
+  });
+</script>

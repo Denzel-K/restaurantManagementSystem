@@ -1,102 +1,182 @@
-<section class="inventory">
-  <div class="stock">
-    <div class="newBox">
-      <button class="addNewItem" type="button">
-        <span>Add Item</span>
-        <img src="images/add.svg" alt="add">
-      </button>
-    </div>
-
-    <div id="category-buttons"></div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Item Name</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Reorder Level</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="inventory-table-body">
-        {{!-- Table rows will be inserted here dynamically --}}
-      </tbody>
-    </table>
-
-    <div class="pagination">
-      <button id="prev">Previous</button>
-      <p>Page: <span id="current-page">1</span></p>
-      <button id="next">Next</button>
-    </div>
-  </div>
-
-  <div class="item-details" style="display: none;">
-    <h3>Item Details</h3>
-    
-    <form id="item-form">
-    <!-- Hidden field for item ID -->
-    <input type="hidden" id="item-id" name="item-id" />
-
-    <p><strong>Item Name:</strong> <span id="item-name"></span></p>
-    <p><strong>Category:</strong> <span id="item-category"></span></p>
-    <p><strong>Created At:</strong> <span id="item-created-at"></span></p>
-    <p><strong>Updated At:</strong> <span id="item-updated-at"></span></p>
-
-    <label for="item-quantity"><strong>Quantity Available:</strong></label>
-    <input type="number" id="item-quantity" name="quantity" min="0" />
-
-    <label for="item-unit-price"><strong>Unit Price ($):</strong></label>
-    <input type="number" id="item-unit-price" name="unit_price" min="0" step="0.01" />
-
-    <label for="item-reorder-level"><strong>Reorder Level:</strong></label>
-    <input type="number" id="item-reorder-level" name="reorder_level" min="0" />
-
-    <label for="item-notes"><strong>Special Notes:</strong></label>
-    <textarea id="item-notes" name="special_notes" rows="3"></textarea>
-
-    <div class="modifyActions">
-      <button type="button" id="update-item">Update</button>
-      <button type="button" id="delete-item">Remove</button>
-    </div>
-
-    <button type="button" id="back-to-stock" class="backToStock">Back to Stock</button>
-  </form>
-
-  </div>
-
-  <div class="addItem" style="display: none;">
-    <h3>Add New Item</h3>
-
-    <form id="add-item-form">
-      <label for="item_name">Item Name:</label>
-      <input type="text" id="item_name" name="item_name" required />
-
-      <label for="category">Category:</label>
-      <input type="text" id="category" name="category" required />
-
-      <label for="quantity">Quantity:</label>
-      <input type="number" id="quantity" name="quantity" min="0" required />
-
-      <label for="unit-price">Unit Price:</label>
-      <input type="number" id="unit-price" name="unit-price" step="0.01" required />
-
-      <label for="reorder-level">Reorder Level:</label>
-      <input type="number" id="reorder-level" name="reorder-level" min="0" required />
-
-      <label for="special-notes">Special Notes:</label>
-      <textarea id="special-notes" name="special-notes" rows="4"></textarea>
-
-
-      <div class="addActions">
-        <button type="submit" id="submit-item">Add Item</button>
-        <button type="button" id="clear-form">Clear</button>
+<section class="dashContainer userDash">
+    <section class="sidebar">
+      <div class="sideLogo userLogo">
+        <span>FAMIKE PARK</span>
+        <img src="images/menu.svg" alt="menu" class="menuOpen">
+        <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
       </div>
 
-      <button type="button" id="back-to-stock2" class="backToStock">Back to Stock</button>
-    </form>
-  </div>
-</section>
+      <div class="pageLinks userPages">
+        <a href="/inventory" data-target="home">
+          <img src="images/inventory.svg" alt="tips">
+          <span>Inventory</span>
+        </a>
+
+        <a href="/menu" data-target="home">
+          <img src="images/menuFood1.svg" alt="notifications">
+          <span>Menu</span>
+        </a>
+
+        <a href="/orders" data-target="home">
+          <img src="images/orders.svg" alt="support">
+          <span>Orders</span>
+        </a>
+
+        <a href="#" data-target="home">
+          <img src="images/logout.svg" alt="logout">
+          <span>Logout</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="dashBody">
+      <div class="dashHead">
+        <div class="currentPage">
+          {{pageTitle}}
+        </div>
+
+        <div class="profileBox userProfileBox">
+          <img src="images/userProfile.svg" alt="userProfile">
+          <span>{{email}}</span>
+        </div>
+      </div>
+
+      <div class="dashMain userDashMain">
+        <section class="inventory">
+          <div class="stock">
+            <div class="newBox">
+              <button class="addNewItem" type="button">
+                <span>Add Item</span>
+                <img src="images/add.svg" alt="add">
+              </button>
+            </div>
+
+            <div id="category-buttons"></div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Item Name</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Reorder Level</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body">
+                {{!-- Table rows will be inserted here dynamically --}}
+              </tbody>
+            </table>
+
+            <div class="pagination">
+              <button id="prev">Previous</button>
+              <p>Page: <span id="current-page">1</span></p>
+              <button id="next">Next</button>
+            </div>
+          </div>
+
+          <div class="item-details" style="display: none;">
+            <h3>Item Details</h3>
+            
+            <form id="item-form">
+            <!-- Hidden field for item ID -->
+            <input type="hidden" id="item-id" name="item-id" />
+
+            <p><strong>Item Name:</strong> <span id="item-name"></span></p>
+            <p><strong>Category:</strong> <span id="item-category"></span></p>
+            <p><strong>Created At:</strong> <span id="item-created-at"></span></p>
+            <p><strong>Updated At:</strong> <span id="item-updated-at"></span></p>
+
+            <label for="item-quantity"><strong>Quantity Available:</strong></label>
+            <input type="number" id="item-quantity" name="quantity" min="0" />
+
+            <label for="item-unit-price"><strong>Unit Price ($):</strong></label>
+            <input type="number" id="item-unit-price" name="unit_price" min="0" step="0.01" />
+
+            <label for="item-reorder-level"><strong>Reorder Level:</strong></label>
+            <input type="number" id="item-reorder-level" name="reorder_level" min="0" />
+
+            <label for="item-notes"><strong>Special Notes:</strong></label>
+            <textarea id="item-notes" name="special_notes" rows="3"></textarea>
+
+            <div class="modifyActions">
+              <button type="button" id="update-item">Update</button>
+              <button type="button" id="delete-item">Remove</button>
+            </div>
+
+            <button type="button" id="back-to-stock" class="backToStock">Back to Stock</button>
+          </form>
+
+          </div>
+
+          <div class="addItem" style="display: none;">
+            <h3>Add New Item</h3>
+
+            <form id="add-item-form">
+              <label for="item_name">Item Name:</label>
+              <input type="text" id="item_name" name="item_name" required />
+
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category" required />
+
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="quantity" name="quantity" min="0" required />
+
+              <label for="unit-price">Unit Price:</label>
+              <input type="number" id="unit-price" name="unit-price" step="0.01" required />
+
+              <label for="reorder-level">Reorder Level:</label>
+              <input type="number" id="reorder-level" name="reorder-level" min="0" required />
+
+              <label for="special-notes">Special Notes:</label>
+              <textarea id="special-notes" name="special-notes" rows="4"></textarea>
+
+
+              <div class="addActions">
+                <button type="submit" id="submit-item">Add Item</button>
+                <button type="button" id="clear-form">Clear</button>
+              </div>
+
+              <button type="button" id="back-to-stock2" class="backToStock">Back to Stock</button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </section>
+  </section> 
 
 <script src="js/inventory.js"></script>
+<script>
+  const menus = document.querySelectorAll('.menuOpen');
+  const closeMenus = document.querySelectorAll('.menuClose');
+  const dashboards = document.querySelectorAll('.dashContainer');
+
+  menus.forEach(menu => {
+    menu.addEventListener('click', () => {
+      menu.classList.add('hidden');
+
+      closeMenus.forEach(closeMenu => {
+        closeMenu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    });
+  });
+
+  closeMenus.forEach(closeMenu => {
+    closeMenu.addEventListener('click', () => {
+      closeMenu.classList.add('hidden');
+
+      menus.forEach(menu => {
+        menu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    })
+  });
+</script>

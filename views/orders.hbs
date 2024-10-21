@@ -1,52 +1,132 @@
-<section class="orders">
-  <div class="orderHistory">
-    <div class="newBox">
-      <button class="newOrderRedirect" type="button">
-        <span>New order</span>
-        <img src="images/add.svg" alt="add">
-      </button>
+<section class="dashContainer userDash">
+  <section class="sidebar">
+    <div class="sideLogo userLogo">
+      <span>FAMIKE PARK</span>
+      <img src="images/menu.svg" alt="menu" class="menuOpen">
+      <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
     </div>
 
-    <div id="category-buttons"></div>
+    <div class="pageLinks userPages">
+      <a href="/inventory" data-target="home">
+        <img src="images/inventory.svg" alt="tips">
+        <span>Inventory</span>
+      </a>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Order Number</th>
-          <th>Total Price</th>
-          <th>Payment Method</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+      <a href="/menu" data-target="home">
+        <img src="images/menuFood1.svg" alt="notifications">
+        <span>Menu</span>
+      </a>
 
-      <tbody id="orderHistoryBody">
-        {{!-- Table rows will be inserted here dynamically --}}
-      </tbody>
-    </table>
+      <a href="/orders" data-target="home">
+        <img src="images/orders.svg" alt="support">
+        <span>Orders</span>
+      </a>
 
-    <div class="pagination">
-      <button id="prev">Previous</button>
-      <p>Page: <span id="current-page">1</span></p>
-      <button id="next">Next</button>
+      <a href="#" data-target="home">
+        <img src="images/logout.svg" alt="logout">
+        <span>Logout</span>
+      </a>
     </div>
-  </div>
+  </section>
 
-  <div class="orderDetails" style="display: none;">
-    <!-- Order details form will go here -->
-  </div>
+  <section class="dashBody">
+    <div class="dashHead">
+      <div class="currentPage">
+        {{pageTitle}}
+      </div>
 
-  <!-- Hidden container to display receipt details -->
-  <div class="receiptBox" style="display: none;">
-    <div class="receiptContent">
-      <!-- Receipt details will be injected here -->
-     
+      <div class="profileBox userProfileBox">
+        <img src="images/userProfile.svg" alt="userProfile">
+        <span>{{email}}</span>
+      </div>
     </div>
-  </div>
 
-</section>
+    <div class="dashMain userDashMain">
+      <section class="orders">
+        <div class="orderHistory">
+          <div class="newBox">
+            <button class="newOrderRedirect" type="button">
+              <span>New order</span>
+              <img src="images/add.svg" alt="add">
+            </button>
+          </div>
+
+          <div id="category-buttons"></div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Order Number</th>
+                <th>Total Price</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="orderHistoryBody">
+              {{!-- Table rows will be inserted here dynamically --}}
+            </tbody>
+          </table>
+
+          <div class="pagination">
+            <button id="prev">Previous</button>
+            <p>Page: <span id="current-page">1</span></p>
+            <button id="next">Next</button>
+          </div>
+        </div>
+
+        <div class="orderDetails" style="display: none;">
+          <!-- Order details form will go here -->
+        </div>
+
+        <!-- Hidden container to display receipt details -->
+        <div class="receiptBox" style="display: none;">
+          <div class="receiptContent">
+            <!-- Receipt details will be injected here -->
+          
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</section> 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/orders.js"></script>
+
+<script>
+  const menus = document.querySelectorAll('.menuOpen');
+  const closeMenus = document.querySelectorAll('.menuClose');
+  const dashboards = document.querySelectorAll('.dashContainer');
+
+  menus.forEach(menu => {
+    menu.addEventListener('click', () => {
+      menu.classList.add('hidden');
+
+      closeMenus.forEach(closeMenu => {
+        closeMenu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    });
+  });
+
+  closeMenus.forEach(closeMenu => {
+    closeMenu.addEventListener('click', () => {
+      closeMenu.classList.add('hidden');
+
+      menus.forEach(menu => {
+        menu.classList.remove('hidden');
+      })
+
+      dashboards.forEach(dashboard => {
+        dashboard.classList.toggle('active');
+      });
+    })
+  });
+</script>

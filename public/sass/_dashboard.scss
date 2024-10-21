@@ -37,19 +37,13 @@
       @include flexbox(row, space-between, center);
 
       span{
-        font-size: 32px;
+        font-size: 22px;
         font-weight: 700;
-        color: black;
+        color: rgb(41, 39, 39);
 
         @media(max-width: 1040px){
           display: none;
-          font-size: 30px;
-        }
-        @media(max-width: 780px){
-          font-size: 28px;
-        }
-        @media(max-width: 600px){
-          font-size: 26px;
+          font-size: 20px;
         }
       }
       img{
@@ -64,17 +58,6 @@
         display: none;
       }
     }
-
-    // .userLogo{
-    //   color: rgb(160, 243, 211);
-    // }
-    // .bizLogo{
-    //   color: rgb(178, 163, 247);
-    // }
-    // .adminLogo{
-    //   color: rgb(247, 239, 163);
-    // }
-
 
     .pageLinks{
       @include flexbox(column, flex-start, center);

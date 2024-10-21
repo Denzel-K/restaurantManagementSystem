@@ -2,13 +2,14 @@ const { Router } = require('express');
 const router = Router();
 const authController = require('../controller/authController');
 const loadPages = require('../controller/loadPages');
+const {authMiddleware} = require('../middleware/authMiddleware');
 
 // Load pages
-router.get('/', loadPages.getHome);
+router.get('/', loadPages.getAuth);
 router.get('/dashboard', loadPages.getDashboard);
-router.get('/inventory', loadPages.renderInventory);
-router.get('/menu', loadPages.renderMenu);
-router.get('/orders', loadPages.renderOrders);
+router.get('/inventory', authMiddleware, loadPages.renderInventory);
+router.get('/menu', authMiddleware, loadPages.renderMenu);
+router.get('/orders', authMiddleware, loadPages.renderOrders);
 
 router.post('/login', authController.loginUser);
 router.post('/register', authController.registerUser);

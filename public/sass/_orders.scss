@@ -97,16 +97,16 @@
       }
   
       .closeReceiptBtn {
-        margin-top: 15px;
-        padding: 5px 10px;
-        background-color: #ff4757;
+        margin-top: 12px;
+        padding: 4px 8px;
+        background-color: #e7214c;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
   
         &:hover {
-          background-color: #e84118;
+          background-color: #d82240;
         }
       }
     }
@@ -119,7 +119,7 @@
 }
 
 .actionBtnBox{
-  @include flexbox(row, center, center);
+  @include flexbox(row, start, center);
 }
 
 

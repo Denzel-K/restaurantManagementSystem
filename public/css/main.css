@@ -24,6 +24,7 @@ body {
 
 .authContainer {
   max-width: 600px;
+  width: 100%;
   margin: auto;
   background-color: #ffffff;
   padding: 2rem 1.75rem;
@@ -188,6 +189,52 @@ body {
   background-color: rgb(46, 216, 145);
 }
 
+.authPage {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.authPage .authHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  border-bottom: 1.5px solid rgb(187, 187, 187);
+}
+.authPage .authHeader .logo {
+  padding: 1.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #11253a;
+}
+.authPage .authHeader .authFormLinks {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 180px;
+}
+.authPage .authHeader .authFormLinks > div {
+  color: #074e99;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+.authPage .authHeader .authFormLinks > div:hover {
+  cursor: pointer;
+  color: #199edb;
+}
+
 .dashContainer {
   display: grid;
   grid-template-columns: 1fr;
@@ -239,24 +286,14 @@ body {
   gap: 0;
 }
 .dashContainer .sidebar .sideLogo span {
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 700;
-  color: black;
+  color: rgb(41, 39, 39);
 }
 @media (max-width: 1040px) {
   .dashContainer .sidebar .sideLogo span {
     display: none;
-    font-size: 30px;
-  }
-}
-@media (max-width: 780px) {
-  .dashContainer .sidebar .sideLogo span {
-    font-size: 28px;
-  }
-}
-@media (max-width: 600px) {
-  .dashContainer .sidebar .sideLogo span {
-    font-size: 26px;
+    font-size: 20px;
   }
 }
 .dashContainer .sidebar .sideLogo img {
@@ -1079,16 +1116,16 @@ table td {
   margin-bottom: 8px;
 }
 .orders .receiptBox .receiptContent .closeReceiptBtn {
-  margin-top: 15px;
-  padding: 5px 10px;
-  background-color: #ff4757;
+  margin-top: 12px;
+  padding: 4px 8px;
+  background-color: #e7214c;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 .orders .receiptBox .receiptContent .closeReceiptBtn:hover {
-  background-color: #e84118;
+  background-color: #d82240;
 }
 .orders .receiptBox.hidden {
   display: none;
@@ -1097,7 +1134,7 @@ table td {
 .actionBtnBox {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   flex-wrap: nowrap;
   gap: 0;

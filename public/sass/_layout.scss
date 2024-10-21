@@ -1,4 +1,5 @@
-// SCSS Styles for Auth Forms
+@import 'variables';
+
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -9,6 +10,7 @@ body {
 // Main container
 .authContainer {
   max-width: 600px;
+  width: 100%;
   margin: auto;
   background-color: #ffffff;
   padding: 2rem 1.75rem;
@@ -179,5 +181,41 @@ body {
     font-size: .85rem;
     color: black;
     background-color: rgb(46, 216, 145);
+  }
+}
+
+.authPage{
+  width: 100%;
+  min-height: 100vh;
+  @include flexbox(column, start, center);
+
+  .authHeader{
+    @include flexbox(row, space-between, center);
+    width: 100%;
+    border-bottom: 1.5px solid rgb(187, 187, 187);
+
+    .logo{
+      padding: 1.5rem 1rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color:#11253a;
+    }
+
+    .authFormLinks{
+      @include flexbox(row, space-around, center);
+      width: 180px;
+
+      & > div{
+        color: #074e99;
+        font-size: 14px;
+        font-weight: 600;
+        transition: .3s ease;
+
+        &:hover{
+          cursor: pointer;
+          color:#199edb;
+        }
+      }
+    }
   }
 }

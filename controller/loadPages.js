@@ -11,22 +11,46 @@ const db = mysql.createPool({
   multipleStatements: true 
 });
 
-module.exports.getHome = (_req, res) => {
-  res.render('home', {pageTitle: 'Restaurant Management System'});
+module.exports.getAuth = (_req, res) => {
+  res.render('auth', {pageTitle: 'Restaurant Management System'});
 }
 
 module.exports.getDashboard = (_req, res) => {
   res.render('dashboard', {pageTitle: 'Dashboard'});
 }
 
-module.exports.renderInventory = async (_req, res) => {
-  res.render('inventory', {pageTitle: 'Inventory'});
+module.exports.renderInventory = async (req, res) => {
+  const user = req.user;
+
+  res.render('inventory', 
+    {
+      pageTitle: 'Inventory',
+      user,
+      email: user.email
+    }
+  );
 }
 
-module.exports.renderMenu= async (_req, res) => {
-  res.render('menu', {pageTitle: 'Menu'});
+module.exports.renderMenu= async (req, res) => {
+  const user = req.user;
+  console.log(user);
+  res.render('menu',
+    {
+      pageTitle: 'Menu',
+      user,
+      email: user.email
+    }
+  );
 }
 
-module.exports.renderOrders= async (_req, res) => {
-  res.render('orders', {pageTitle: 'Order History'});
+module.exports.renderOrders= async (req, res) => {
+  const user = req.user;
+
+  res.render('orders', 
+    {
+      pageTitle: 'Order History',
+      user,
+      email: user.email
+    }
+  );
 }

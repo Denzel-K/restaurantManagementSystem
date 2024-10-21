@@ -1,4 +1,15 @@
-<main>
+<section class="authPage">
+  <div class="authHeader">
+    <div class="logo">
+      FAMIKE PARK
+    </div>
+
+    <div class="authFormLinks">
+      <div class="switchToLogin">Login</div>
+      <div class="switchToRegister">Register</div>
+    </div>
+  </div>
+
   <section class="authContainer">
     <!-- Login Form -->
     <form id="loginForm" class="login_form">
@@ -32,26 +43,30 @@
       <p>Already have an account? <span id="showLogin">Login here</span></p>
     </form>
   </section>
-</main>
-
+</section>
 
 <script>
   // Toggle between login and register forms
-  document.getElementById('showRegister').addEventListener('click', () => {
+  function showRegisterForm() {
     document.querySelector('.login_form').style = `display: none`;
     document.querySelector('.register_form').style = `
       display: flex; 
       flex-direction: column
     `;
-  });
+  }
 
-  document.getElementById('showLogin').addEventListener('click', () => {
+  function showLoginForm() {
     document.querySelector('.login_form').style = `
       display: flex; 
       flex-direction: column
     `;
     document.querySelector('.register_form').style = `display: none`;
-  });
+  }
+
+  document.getElementById('showRegister').addEventListener('click', showRegisterForm);
+  document.getElementById('showLogin').addEventListener('click', showLoginForm);
+  document.querySelector('.switchToRegister').addEventListener('click', showRegisterForm);
+  document.querySelector('.switchToLogin').addEventListener('click', showLoginForm);
 
   // Handle login form submission
   document.getElementById('loginForm').addEventListener('submit', async function(e) {

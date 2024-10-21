@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const authRoutes = require("./routes/authRoutes");
 const morgan = require('morgan');
 const { setupDatabase } = require('./lib/database');
+const cookie_parser = require('cookie-parser');
 
 //.env
 dotenv.config();
@@ -47,8 +48,9 @@ app.use(morgan("dev"));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(authRoutes);
 app.use(cors());
+app.use(cookie_parser()); 
+app.use(authRoutes);
 
 // Check if the database and tables exist, and set them up if necessary
 setupDatabase()

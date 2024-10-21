@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Receipt box layout with Print button
       receiptBox.innerHTML = `
         <div id="receiptDetails-${order.id}" class="receiptDetails official-receipt">
-          <h3>RMS</h3>
+          <h3>FAMIKE PARK</h3>
           <p><strong>Total Price:</strong> $${order.total_price}</p>
           <p><strong>Payment Method:</strong> ${order.payment_method}</p>
           <p><strong>Status:</strong> ${order.status}</p>
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Inject receipt data into the receiptDetails container
           receiptDetails.innerHTML =  `
-            <h3>RMS</h3>
+            <h3>FAMIKE PARK</h3>
 
             <p><strong>Order Number: </strong> ${data.order_number}</p>
             <p><strong>Total Price: </strong> $${data.total_price}</p>

@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Ensure priceElement exists before accessing textContent
       if (!priceElement) {
         console.error('Price element not found for item:', itemName);
-        return; // Exit if the price element is not found
+        return; 
       }
   
       const priceText = priceElement.textContent;
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
       if (response.ok) {
         alert('Order placed successfully!');
-        location.assign('/menu');
+        location.assign('/orders');
       } 
       else {
         const errorText = await response.text();

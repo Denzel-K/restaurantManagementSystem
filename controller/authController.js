@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secretKey = 'your_jwt_secret';
-const maxAge = 3 * 24 * 60 * 60;
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
 
 dotenv.config();
+
+const secretKey = process.env.JWT_SECRET;
+const maxAge = 3 * 24 * 60 * 60;
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
@@ -31,7 +32,7 @@ exports.registerUser = async (req, res) => {
 
     // Create new user and assign them the 'super_admin' role if they are the first user
     const [existingUsers] = await db.promise().query('SELECT * FROM users');
-    const role_id = existingUsers.length === 0 ? 1 : 4; // '1' -> super_admin, '4' -> general_users
+    const role_id = existingUsers.length === 0 ? 1 : 4; // '1' -> super_admin, '4' -> general_users/kitchen
     
     // Insert the new user into the database
     const [result] = await db.promise().query(
@@ -41,6 +42,7 @@ exports.registerUser = async (req, res) => {
 
     // Automatically log in the user by generating a JWT token
     const token = jwt.sign({ id: result.insertId, email: email }, secretKey, { expiresIn: maxAge });
+    res.cookie ('jwt', token, { httpOnly: true, expiresIn: maxAge });
 
     // Redirect to the same page with the token
     res.status(201).json({
@@ -76,6 +78,7 @@ exports.loginUser = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign({ id: foundUser.id, email: foundUser.email }, secretKey, { expiresIn: maxAge });
+    res.cookie ('jwt', token, { httpOnly: true, expiresIn: maxAge });
 
     // Redirect to the same page with the token
     res.status(200).json({
