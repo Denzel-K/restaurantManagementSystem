@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
       renderTable();
       renderPagination();
       renderCategoryButtons();
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
@@ -157,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
             <p><strong>Cashier:</strong> ${data.cashier_name}</p>
             <hr>
-            <button class="printReceiptBtn" data-id="${orderId}">Print Receipt</button>
+            <button class="printReceiptBtn" data-id="${orderId}">Download Receipt</button>
           `;
     
           // Attach event listener to the Print button after adding to the DOM
@@ -172,44 +173,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     // Function to generate receipt as PDF
+    const { jsPDF } = window.jspdf;
+    const DOMPurify = window.DOMPurify;
+    const html2canvas = window.html2canvas;
+
     const generatePDF = async (orderId) => {
-      const data = await fetchOrderData(orderId);
-      if (!data) return; // Exit if no data is fetched
+      const response = await fetch(`/api/orders/${orderId}/receipt`);
+      const data = await response.json();
+      if (!data) return;
     
       const receiptContent = `
-        <div class="receiptDetails" style="padding: 1.5rem 1rem; border-radius: 8px; max-width: 500px; margin: 0 auto; font-family: Arial, sans-serif;">
+        <div style="padding: 1.5rem 1rem; border-radius: 8px; max-width: 500px; margin: 0 auto; font-family: Arial, sans-serif; width: 500px;">
           <h3 style="text-align: center; color: #0a3a66;">FAMIKE PARK</h3>
           <p style="margin-top: 1.5rem;"><strong>Order No:</strong> ${data.order_number}</p>
-          <div class="orderItemsInfo" style="margin: 1rem 0; border: 1.5px solid rgb(207, 207, 207); border-radius: 4px; padding: .8rem .65rem;">
+          <div class="orderItemsInfo" style="margin: 1rem 0; border: 1.5px solid rgb(207, 207, 207); border-radius: 4px; padding: .8rem .65rem; width: 100%;">
             <h4 style="text-align: left; font-size: 1rem; color: rgb(54, 53, 53);">Order Items</h4>
             <ul style="margin-top: .5rem;">
               ${data.order_items.map(item => `<li style="margin: .85rem 0 .85rem 1rem; font-size: 12px;">${item.name} (Qty: ${item.quantity}, Price: $${item.price})</li>`).join('')}
             </ul>
             <p style="opacity: .8; margin: .5rem 0 0 0;"><strong>Total Price:</strong> $${data.total_price}</p>
           </div>
-          <p><strong>Payment Method:</strong> ${data.payment_method}</p>
-          <p><strong>Status:</strong> ${data.status}</p>
-          <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
-          <p><strong>Cashier:</strong> ${data.cashier_name}</p>
+          <p style="margin: .65rem 0; opacity: 9;"><strong>Payment Method:</strong> ${data.payment_method}</p>
+          <p style="margin: .65rem 0; opacity: 9;"><strong>Status:</strong> ${data.status}</p>
+          <p style="margin: .65rem 0; opacity: 9;"><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
+          <p style="margin: .65rem 0; opacity: 9;"><strong>Cashier:</strong> ${data.cashier_name}</p>
           <hr style="margin: 15px 0;">
-          <p style="text-align: right; font-weight: bold;">Thank you for your order!</p>
+          <p style="text-align: center; font-weight: bold; font-family: 'Arial', sans-serif;">Thank you for your order!</p>
         </div>
       `;
     
-      const pdf = new jsPDF();
+      const sanitizedContent = DOMPurify.sanitize(receiptContent); // Sanitize the HTML content
     
-      pdf.html(receiptContent, {
+      const pdf = new jsPDF();
+      pdf.html(sanitizedContent, {
         callback: function (doc) {
           doc.save(`receipt-${orderId}.pdf`);
         },
         x: 10,
         y: 10,
         html2canvas: {
-          scale: 2
+          scale: 0.25,        
+          width: 600,      
+          windowWidth: 600,
+          maxWidth: 600
         }
       });
-    };    
-
+    };
+    
+    
   // Attach event listeners to the Print buttons inside the receipts
   // document.querySelectorAll(".printReceiptBtn").forEach(button => {
   //   button.addEventListener("click", (e) => {

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
-
+const { authenticateUser } = require('../middleware/authMiddleware');
 dotenv.config();
 
 const secretKey = process.env.JWT_SECRET;
@@ -40,7 +40,7 @@ exports.registerUser = async (req, res) => {
       [name, email, phone, hashedPassword, role_id]
     );
 
-    // Generate JWT token with role_id included
+    // Generate JWT token with role_id and user_id included
     const token = jwt.sign(
       { id: result.insertId, email: email, role_id: role_id },
       secretKey,
@@ -80,7 +80,7 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token with role_id included
+    // Generate JWT token with role_id and user_id included
     const token = jwt.sign(
       { id: foundUser.id, email: foundUser.email, role_id: foundUser.role_id },
       secretKey,
@@ -99,7 +99,6 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
-
 
 // Inventory fetch
 module.exports.getInventory = async (_req, res) => {
@@ -307,92 +306,78 @@ module.exports.fetchItemDetails = async (req, res) => {
 }
 
 // Order placement
-module.exports.placeOrder = async (req, res) => {
-  const { orderItems, paymentMethod } = req.body;
+module.exports.placeOrder = [authenticateUser, async (req, res) => {
+    const { orderItems, paymentMethod } = req.body;
 
-  console.log({ orderItems });
+    // Validate incoming data
+    if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
+      return res.status(400).json({ error: 'No order items provided' });
+    }
 
-  // Validate incoming data
-  if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
-    return res.status(400).json({ error: 'No order items provided' });
-  }
+    try {
+      const userId = req.userId; // Get the authenticated user's ID
 
-  try {
-    const userId = 1; // Set a default user_id for now
+      // Calculate the total price from the order items
+      let totalPrice = 0;
+      const orderItemsData = [];
 
-    // Calculate the total price from the order items
-    let totalPrice = 0;
-    const orderItemsData = [];
+      for (const item of orderItems) {
+        const { itemName, price, quantity } = item;
 
-    for (const item of orderItems) {
-      const { itemName, price, quantity } = item;
+        if (isNaN(price) || isNaN(quantity) || quantity <= 0) {
+          return res.status(400).json({ error: 'Invalid item price or quantity' });
+        }
 
-      // Check if price and quantity are valid
-      if (isNaN(price) || isNaN(quantity) || quantity <= 0) {
-        return res.status(400).json({ error: 'Invalid item price or quantity' });
-      }
+        if (price < 0) {
+          return res.status(400).json({ error: 'Price cannot be negative' });
+        }
 
-      // Check if the price is negative
-      if (price < 0) {
-        return res.status(400).json({ error: 'Price cannot be negative' });
-      }
+        totalPrice += price * quantity;
 
-      totalPrice += price * quantity;
+        const cleanedItemName = itemName.replace(/:$/, '').trim();
+        const [menuItem] = await db.promise().query('SELECT id FROM menu WHERE item_name = ?', [cleanedItemName]);
+        const menuId = menuItem[0]?.id;
 
-      // Get the menu_id based on the item name
-      const cleanedItemName = itemName.replace(/:$/, '').trim();
-      console.log(`Searching for menu item: "${cleanedItemName}"`); 
-
-      const [menuItem] = await db.promise().query('SELECT id FROM menu WHERE item_name = ?', [cleanedItemName]);
-      const menuId = menuItem[0]?.id;
-      console.log(`Menu ID found: ${menuId}`); 
-
-      if (!menuId) {
-          console.log(`Menu item not found for ${cleanedItemName}`);
+        if (!menuId) {
           return res.status(400).json({ error: `Menu item not found for ${cleanedItemName}` });
+        }
+
+        orderItemsData.push([null, menuId, quantity, price]); 
       }
 
-      // Push the values in the correct format for order_items table
-      orderItemsData.push([null, menuId, quantity, price]); // Use null for order_id here, it will be set later
+      if (isNaN(totalPrice)) {
+        return res.status(400).json({ error: 'Total price calculation failed' });
+      }
+
+      const orderQuery = `
+        INSERT INTO orders (order_number, user_id, total_price, payment_method, status, created_at) 
+        VALUES (?, ?, ?, ?, ?, NOW())`;
+
+      const [orderResult] = await db.promise().query(orderQuery, [
+        generateOrderNumber(),
+        userId,
+        totalPrice.toFixed(2),
+        paymentMethod,
+        'pending',
+      ]);
+
+      const orderId = orderResult.insertId;
+
+      const itemsQuery = `
+        INSERT INTO order_items (order_id, menu_id, quantity, unit_price)
+        VALUES ?`;
+
+      const itemsWithOrderId = orderItemsData.map(item => [orderId, ...item.slice(1)]);
+      await db.promise().query(itemsQuery, [itemsWithOrderId]);
+
+      res.status(201).json({ message: 'Order placed successfully', orderId });
+    } catch (error) {
+      console.error('Error placing order:', error);
+      res.status(500).json({ error: 'Failed to place order' });
     }
 
-    // Ensure totalPrice is a valid number
-    if (isNaN(totalPrice)) {
-      return res.status(400).json({ error: 'Total price calculation failed' });
-    }
-
-    // Insert the order into the 'orders' table
-    const orderQuery = `
-      INSERT INTO orders (order_number, user_id, total_price, payment_method, status, created_at) 
-      VALUES (?, ?, ?, ?, ?, NOW())`;
-
-    const [orderResult] = await db.promise().query(orderQuery, [
-      generateOrderNumber(),
-      userId,
-      totalPrice.toFixed(2),
-      paymentMethod,
-      'pending',
-    ]);
-
-    const orderId = orderResult.insertId;
-
-    // Insert each item into the 'order_items' table
-    const itemsQuery = `
-      INSERT INTO order_items (order_id, menu_id, quantity, unit_price)
-      VALUES ?`;
-
-    // Now we can set the order_id for each item
-    const itemsWithOrderId = orderItemsData.map(item => [orderId, ...item.slice(1)]); // Prepend orderId to each item
-
-    await db.promise().query(itemsQuery, [itemsWithOrderId]);
-
-    res.status(201).json({ message: 'Order placed successfully', orderId });
-  } 
-  catch (error) {
-    console.error('Error placing order:', error);
-    res.status(500).json({ error: 'Failed to place order' });
   }
-};
+];
 
 // Helper function to generate a unique order number
 function generateOrderNumber() {

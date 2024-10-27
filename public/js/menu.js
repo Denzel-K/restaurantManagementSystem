@@ -14,12 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
       renderTable();
       renderPagination();
       renderCategoryButtons();
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error fetching menu items:", error);
     }
   };
 
-  // Function to render the table items
+  // Render table items
   const renderTable = () => {
     const tableBody = document.getElementById("menu-table-body");
     tableBody.innerHTML = "";
@@ -45,6 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
       `;
       tableBody.appendChild(row);
+      
+      // Check if this item is already in the orderItems array
+      if (orderItems.some(orderItem => orderItem.id === item.id)) {
+        row.classList.add('selected'); // Highlight the row if previously selected
+        row.querySelector('.make-order').style.display = 'block';
+      }
     });
 
     attachEventListeners();
@@ -115,21 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // Add item details to orderItems array
-        orderItems.push({
-          id: itemDetails.id,
-          name: itemDetails.item_name,
-          description: itemDetails.description,
-          price: itemDetails.price,
-          category: itemDetails.category,
-          quantity: 1
-        });
+        // Add item details to orderItems array if not already present
+        if (!orderItems.some(orderItem => orderItem.id === itemId)) {
+          orderItems.push({
+            id: itemDetails.id,
+            name: itemDetails.item_name,
+            description: itemDetails.description,
+            price: itemDetails.price,
+            category: itemDetails.category,
+            quantity: 1
+          });
 
-        // Update the order form with selected items
-        //updateOrderForm();
-
-        // Show the order form (orderContainer)
-        //document.querySelector('.orderContainer').style.display = 'block';
+          //localStorage.setItem('orderItems', JSON.stringify(orderItems));
+        }
       });
     });
   };
@@ -283,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Enable all order buttons
     const orderButtons = document.querySelectorAll('.make-order');
     orderButtons.forEach(button => button.style.display = 'block');
-  
+
     // Allow selection of items
     const menuTableRows = document.querySelectorAll('#menu-table-body tr');
     menuTableRows.forEach(row => {
@@ -319,10 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const itemContainer = document.createElement('div');
     itemContainer.className = 'order-items';
     
-    // Clear existing items in the form
     orderForm.querySelector('.order-items')?.remove();
-    
-    // Loop through selected items and append them to the form
     orderItems.forEach((item, index) => {
       const itemHTML = `
         <div class="order-item" data-index="${index}">
@@ -338,10 +340,8 @@ document.addEventListener("DOMContentLoaded", () => {
       itemContainer.innerHTML += itemHTML;
     });
 
-    // Append itemContainer to the form
     orderForm.appendChild(itemContainer);
 
-    // Add event listeners for quantity updates and item removal
     document.querySelectorAll('.remove-item').forEach(button => {
       button.addEventListener('click', (e) => {
         const index = button.dataset.index;
@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('input[type="number"]').forEach(input => {
       input.addEventListener('change', (e) => {
-        const index = input.id.split('-')[1]; // Extract index from input ID
+        const index = input.id.split('-')[1];
         orderItems[index].quantity = input.value;
       });
     });
@@ -359,8 +359,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Remove an item from the order
   function removeItemFromOrder(index) {
-    orderItems.splice(index, 1); // Remove item from array
-    updateOrderForm(); // Update the form
+    orderItems.splice(index, 1); 
+    updateOrderForm(); 
   }
 
   // Process order
