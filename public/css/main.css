@@ -1123,29 +1123,14 @@ table td {
   background-color: white;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  width: 300px;
+  border-radius: 8px;
+  width: 450px;
   z-index: 1000;
 }
-.orders .receiptBox .receiptContent h3 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
-.orders .receiptBox .receiptContent p {
-  font-size: 1em;
-  margin-bottom: 8px;
-}
-.orders .receiptBox .receiptContent .closeReceiptBtn {
-  margin-top: 12px;
-  padding: 4px 8px;
-  background-color: #e7214c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.orders .receiptBox .receiptContent .closeReceiptBtn:hover {
-  background-color: #d82240;
+@media (max-width: 600px) {
+  .orders .receiptBox {
+    width: 300px;
+  }
 }
 .orders .receiptBox.hidden {
   display: none;
@@ -1163,13 +1148,38 @@ table td {
 .receiptDetails {
   padding: 1.5rem 1rem;
   border-radius: 8px;
-  max-width: 500px;
+  width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
 }
 .receiptDetails h3 {
   text-align: center;
-  margin-bottom: 15px;
+  color: #0a3a66;
+}
+.receiptDetails .orderNo {
+  margin-top: 1.5rem;
+}
+.receiptDetails .orderItemsInfo {
+  margin: 1rem 0;
+  border: 1.5px solid rgb(207, 207, 207);
+  border-radius: 4px;
+  padding: 0.8rem 0.65rem;
+}
+.receiptDetails .orderItemsInfo h4 {
+  text-align: left;
+  font-size: 1rem;
+  color: rgb(54, 53, 53);
+}
+.receiptDetails .orderItemsInfo ul {
+  margin-top: 0.5rem;
+}
+.receiptDetails .orderItemsInfo ul li {
+  margin: 0.85rem 0 0.85rem 1rem;
+  font-size: 12px;
+}
+.receiptDetails .orderItemsInfo p {
+  opacity: 0.8;
+  margin: 0.5rem 0 0 0;
 }
 .receiptDetails p {
   margin: 12px 0;
@@ -1181,22 +1191,28 @@ table td {
 .receiptDetails .printReceiptBtn {
   color: black;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
   background-color: #43b0f0;
   width: 100%;
   transition: background-color 0.3s;
 }
+.receiptDetails .printReceiptBtn:hover {
+  background-color: #59bbf3;
+}
 
 .closeReceiptBtn {
-  background-color: #f44336;
+  background-color: #d6264c;
   color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 4px;
   margin: 10px 0 0 1rem;
   width: 12ch;
   transition: background-color 0.3s;
+}
+.closeReceiptBtn:hover {
+  cursor: pointer;
+  background-color: #e63058;
 }
 
 .accounts {

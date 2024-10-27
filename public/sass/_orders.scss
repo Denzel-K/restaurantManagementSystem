@@ -81,36 +81,14 @@
     background-color: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    width: 300px;
+    border-radius: 8px;
+    width: 450px;
     z-index: 1000;
-  
-    .receiptContent {
-      h3 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-      }
-  
-      p {
-        font-size: 1em;
-        margin-bottom: 8px;
-      }
-  
-      .closeReceiptBtn {
-        margin-top: 12px;
-        padding: 4px 8px;
-        background-color: #e7214c;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-  
-        &:hover {
-          background-color: #d82240;
-        }
-      }
+
+    @media(max-width: 600px){
+      width: 300px;;
     }
-  
+
     &.hidden {
       display: none;
     }
@@ -126,13 +104,44 @@
 .receiptDetails {
   padding: 1.5rem 1rem;
   border-radius: 8px;
-  max-width: 500px;
+  width: 100%;
   margin: 0 auto; 
   font-family: Arial, sans-serif;
 
   h3 {
     text-align: center;
-    margin-bottom: 15px;
+    color:#0a3a66;
+  }
+
+  .orderNo{
+    margin-top: 1.5rem;
+  }
+
+  .orderItemsInfo{
+    margin: 1rem 0;
+    border: 1.5px solid rgb(207, 207, 207);
+    border-radius: 4px;
+    padding: .8rem .65rem;
+
+    h4{
+      text-align: left;
+      font-size: 1rem;
+      color: rgb(54, 53, 53);
+    }
+
+    ul{
+      margin-top: .5rem;
+
+      li{
+        margin: .85rem 0 .85rem 1rem;
+        font-size: 12px;
+      }
+    }
+
+    p{
+      opacity: .8;
+      margin: .5rem 0 0 0;
+    }
   }
 
   p {
@@ -147,22 +156,29 @@
   .printReceiptBtn {
     color: black;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     background-color: #43b0f0;
     width: 100%;
     transition: background-color 0.3s;
 
+    &:hover{
+      background-color: #59bbf3;
+    }
   }
 }
 
 .closeReceiptBtn {
-  background-color: #f44336;
+  background-color: #d6264c;
   color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 4px;
   margin: 10px 0 0 1rem;
   width: 12ch; 
   transition: background-color 0.3s;
+
+  &:hover{
+    cursor: pointer;
+    background-color: #e63058;
+  }
 }

@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error('Network response was not ok');
       }
       return await response.json();
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Error fetching order data:', error);
       return null;
     }
@@ -132,26 +133,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const orderId = e.target.getAttribute("data-id");
         const receiptBox = document.getElementById(`receiptBox-${orderId}`);
         const receiptDetails = document.getElementById(`receiptDetails-${orderId}`);
-
+    
         // Show the receiptBox
         receiptBox.style.display = 'block';
-
+    
         try {
           const response = await fetch(`/api/orders/${orderId}/receipt`);
           const data = await response.json();
-
+    
           // Inject receipt data into the receiptDetails container
-          receiptDetails.innerHTML =  `
+          receiptDetails.innerHTML = `
             <h3>FAMIKE PARK</h3>
-
-            <p><strong>Order Number: </strong> ${data.order_number}</p>
-            <p><strong>Total Price: </strong> $${data.total_price}</p>
-            <p><strong>Payment Method: </strong> ${data.payment_method}</p>
+            <p class="orderNo"><strong>Order No:</strong> ${data.order_number}</p>
+            <div class="orderItemsInfo">
+              <h4>Order Items</h4>
+              <ul>${data.order_items.map(item => 
+                `<li>${item.name} (Qty: ${item.quantity}, Price: $${item.price})</li>`).join('')}
+              </ul>
+              <p><strong>Total Price:</strong> $${data.total_price}</p>
+            </div>
+            <p><strong>Payment Method:</strong> ${data.payment_method}</p>
             <p><strong>Status:</strong> ${data.status}</p>
             <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
+            <p><strong>Cashier:</strong> ${data.cashier_name}</p>
             <hr>
             <button class="printReceiptBtn" data-id="${orderId}">Print Receipt</button>
           `;
+    
+          // Attach event listener to the Print button after adding to the DOM
+          const printButton = receiptDetails.querySelector(".printReceiptBtn");
+          printButton.addEventListener("click", () => generatePDF(orderId));
         } 
         catch (error) {
           console.error("Error fetching receipt:", error);
@@ -159,57 +170,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     });
+    
+    // Function to generate receipt as PDF
+    const generatePDF = async (orderId) => {
+      const data = await fetchOrderData(orderId);
+      if (!data) return; // Exit if no data is fetched
+    
+      const receiptContent = `
+        <div class="receiptDetails" style="padding: 1.5rem 1rem; border-radius: 8px; max-width: 500px; margin: 0 auto; font-family: Arial, sans-serif;">
+          <h3 style="text-align: center; color: #0a3a66;">FAMIKE PARK</h3>
+          <p style="margin-top: 1.5rem;"><strong>Order No:</strong> ${data.order_number}</p>
+          <div class="orderItemsInfo" style="margin: 1rem 0; border: 1.5px solid rgb(207, 207, 207); border-radius: 4px; padding: .8rem .65rem;">
+            <h4 style="text-align: left; font-size: 1rem; color: rgb(54, 53, 53);">Order Items</h4>
+            <ul style="margin-top: .5rem;">
+              ${data.order_items.map(item => `<li style="margin: .85rem 0 .85rem 1rem; font-size: 12px;">${item.name} (Qty: ${item.quantity}, Price: $${item.price})</li>`).join('')}
+            </ul>
+            <p style="opacity: .8; margin: .5rem 0 0 0;"><strong>Total Price:</strong> $${data.total_price}</p>
+          </div>
+          <p><strong>Payment Method:</strong> ${data.payment_method}</p>
+          <p><strong>Status:</strong> ${data.status}</p>
+          <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
+          <p><strong>Cashier:</strong> ${data.cashier_name}</p>
+          <hr style="margin: 15px 0;">
+          <p style="text-align: right; font-weight: bold;">Thank you for your order!</p>
+        </div>
+      `;
+    
+      const pdf = new jsPDF();
+    
+      pdf.html(receiptContent, {
+        callback: function (doc) {
+          doc.save(`receipt-${orderId}.pdf`);
+        },
+        x: 10,
+        y: 10,
+        html2canvas: {
+          scale: 2
+        }
+      });
+    };    
 
-  // Function to generate receipt as PDF
-const generatePDF = async (orderId) => {
-  const data = await fetchOrderData(orderId);
-  if (!data) return; // Exit if no data is fetched
+  // Attach event listeners to the Print buttons inside the receipts
+  // document.querySelectorAll(".printReceiptBtn").forEach(button => {
+  //   button.addEventListener("click", (e) => {
+  //     const orderId = e.target.getAttribute("data-id");
+  //     generatePDF(orderId);
+  //   });
+  // });
 
-  const receiptContent = `
-    <div class="receiptDetails" style="padding: 1.5rem 1rem; border-radius: 8px; max-width: 500px; margin: 0 auto; font-family: Arial, sans-serif;">
-      <h3 style="text-align: center; margin-bottom: 15px;">RMS</h3>
-      <p><strong>Order Number:</strong> ${data.order_number}</p>
-      <p><strong>Total Price:</strong> $${data.total_price}</p>
-      <p><strong>Payment Method:</strong> ${data.payment_method}</p>
-      <p><strong>Status:</strong> ${data.status}</p>
-      <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
-      <hr style="margin: 15px 0;">
-      <p class="thank-you" style="text-align: right; font-weight: bold;">Thank you for your order!</p>
-    </div>
-  `;
+    // Attach event listeners to the Close buttons inside the receipts
+    document.querySelectorAll(".closeReceiptBtn").forEach(button => {
+      button.addEventListener("click", (e) => {
+        const orderId = e.target.getAttribute("data-id");
+        const receiptBox = document.getElementById(`receiptBox-${orderId}`);
 
-  const pdf = new jsPDF();
-
-  pdf.html(receiptContent, {
-    callback: function (doc) {
-      doc.save(`receipt-${orderId}.pdf`);
-    },
-    x: 10,
-    y: 10,
-    html2canvas: {
-      scale: 2
-    }
-  });
-};
-
-// Attach event listeners to the Print buttons inside the receipts
-document.querySelectorAll(".printReceiptBtn").forEach(button => {
-  button.addEventListener("click", (e) => {
-    const orderId = e.target.getAttribute("data-id");
-    generatePDF(orderId);
-  });
-});
-
-  // Attach event listeners to the Close buttons inside the receipts
-  document.querySelectorAll(".closeReceiptBtn").forEach(button => {
-    button.addEventListener("click", (e) => {
-      const orderId = e.target.getAttribute("data-id");
-      const receiptBox = document.getElementById(`receiptBox-${orderId}`);
-
-      // Hide the receiptBox
-      receiptBox.style.display = 'none';
+        // Hide the receiptBox
+        receiptBox.style.display = 'none';
+      });
     });
-  });
   };
 
   // Function to show order details
@@ -219,7 +237,7 @@ document.querySelectorAll(".printReceiptBtn").forEach(button => {
     orderDetailsContainer.style.display = "block";
     document.querySelector('.orderHistory').style.display = "none";
     
-    // Populate order details here (make it viewable but not editable)
+    // Populate order details
     orderDetailsContainer.innerHTML = `
       <div class="backBox">
         <button id="back-to-orders">Back</button>
@@ -296,6 +314,7 @@ document.querySelectorAll(".printReceiptBtn").forEach(button => {
     }
   });
 
+  // Redirect to menu - newOrder
   document.querySelector('.newOrderRedirect').addEventListener('click', () => {
     window.location.href = '/menu';
   })

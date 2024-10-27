@@ -345,7 +345,7 @@ module.exports.placeOrder = async (req, res) => {
 
       const [menuItem] = await db.promise().query('SELECT id FROM menu WHERE item_name = ?', [cleanedItemName]);
       const menuId = menuItem[0]?.id;
-      console.log(`Menu ID found: ${menuId}`); // Log the result
+      console.log(`Menu ID found: ${menuId}`); 
 
       if (!menuId) {
           console.log(`Menu item not found for ${cleanedItemName}`);
@@ -450,9 +450,18 @@ module.exports.getReceipt = async (req, res) => {
 
   try {
     // Use a Promise wrapper around db.query
-    const [rows] = await new Promise((resolve, reject) => {
+    const [orderRows] = await new Promise((resolve, reject) => {
       db.query(
-        `SELECT order_number, total_price, payment_method, status, updated_at FROM orders WHERE id = ?`,
+        `SELECT 
+          o.order_number, 
+          o.total_price, 
+          o.payment_method, 
+          o.status, 
+          o.updated_at, 
+          c.name AS cashier_name 
+        FROM orders o
+        JOIN users c ON o.user_id = c.id
+        WHERE o.id = ?`,
         [orderId],
         (error, results) => {
           if (error) {
@@ -463,19 +472,41 @@ module.exports.getReceipt = async (req, res) => {
       );
     });
 
-    if (rows.length === 0) {
+    if (orderRows.length === 0) {
       return res.status(404).json({ error: 'Order not found' });
     }
 
-    const order = rows[0];
+    const order = orderRows[0];
 
-    // Send JSON response with the order details
+    // Fetch order items
+    const [itemsRows] = await new Promise((resolve, reject) => {
+      db.query(
+        `SELECT 
+            m.item_name AS name, 
+            oi.quantity, 
+            oi.unit_price AS price 
+        FROM order_items oi
+        JOIN menu m ON oi.menu_id = m.id
+        WHERE oi.order_id = ?`,
+        [orderId],
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve([results]); 
+        }
+      );
+    });
+
+    // Send JSON response with the order details and items
     res.json({
       order_number: order.order_number,
       total_price: order.total_price,
       payment_method: order.payment_method,
       status: order.status,
-      updated_at: order.updated_at
+      updated_at: order.updated_at,
+      cashier_name: order.cashier_name,
+      order_items: itemsRows // Array of items
     });
   } 
   catch (error) {
@@ -483,7 +514,6 @@ module.exports.getReceipt = async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve order receipt' });
   }
 };
-
 
 // Get paginated users
 exports.getPaginatedUsers = async (req, res) => {
