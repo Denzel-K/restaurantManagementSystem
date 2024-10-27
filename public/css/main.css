@@ -455,6 +455,9 @@ body {
   padding: 5rem 1.5rem 0.5rem 1.5rem;
   overflow-y: auto;
 }
+.dashContainer .dashBody .dashMain > section {
+  width: 100%;
+}
 @media (max-width: 600px) {
   .dashContainer .dashBody .dashMain {
     padding: 5rem 0.8rem 0.5rem 0.8rem;
@@ -499,7 +502,7 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0;
   width: 100%;
   padding: 1.5rem 1rem;
@@ -744,6 +747,23 @@ table td {
   margin-left: 4px;
 }
 
+.accountsActionBtns {
+  display: flex;
+  flex-direction: row;
+}
+.accountsActionBtns button {
+  padding: 0.45rem 0.75rem;
+}
+.accountsActionBtns button:nth-child(1) {
+  background-color: rgb(28, 151, 233);
+  color: rgb(235, 230, 230);
+}
+.accountsActionBtns button:nth-child(2) {
+  background-color: rgb(233, 28, 96);
+  color: rgb(235, 230, 230);
+  margin-left: 4px;
+}
+
 .menu {
   display: flex;
   flex-direction: column;
@@ -769,7 +789,7 @@ table td {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0;
   width: 100%;
   padding: 1.5rem 1rem;
@@ -1033,7 +1053,7 @@ table td {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0;
   width: 100%;
   padding: 1.5rem 1rem;
@@ -1177,5 +1197,163 @@ table td {
   margin: 10px 0 0 1rem;
   width: 12ch;
   transition: background-color 0.3s;
+}
+
+.accounts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 20px;
+  width: 100%;
+}
+.accounts .userAccounts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  max-width: 1200px;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+.accounts .userAccounts .roleID_keyMap {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  border: 1.5px solid lightgray;
+  border-radius: 4px;
+}
+.accounts .userAccounts .roleID_keyMap h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: rgb(49, 48, 48);
+}
+.accounts .userAccounts .roleID_keyMap .roleContainer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .accounts .userAccounts .roleID_keyMap .roleContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+}
+.accounts .userAccounts .roleID_keyMap .roleContainer .role {
+  border: 1.5px solid #e3e6e7;
+  padding: 1.25rem 0.8rem;
+  border-radius: 4px;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .accounts .userAccounts .roleID_keyMap .roleContainer .role {
+    padding: 0.8rem 0.65rem;
+    width: 20ch;
+  }
+}
+@media (max-width: 330px) {
+  .accounts .userAccounts .roleID_keyMap .roleContainer .role {
+    font-size: 12px;
+  }
+}
+.accounts .userAccounts .roleID_keyMap .roleContainer .role span:nth-child(1) {
+  color: #252424;
+  font-weight: 700;
+}
+.accounts .userAccounts .roleID_keyMap .roleContainer .role span:nth-child(2) {
+  color: #474747;
+  font-weight: 600;
+}
+.accounts .accountDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.accounts .accountDetails .backBox {
+  width: 100%;
+  padding-bottom: 1rem 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.accounts .accountDetails .backBox button {
+  border: 1.6px solid gray;
+  color: black;
+}
+.accounts .accountDetails .backBox button:hover {
+  background-color: #ccc;
+}
+.accounts .accountDetails h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.accounts .accountDetails form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.accounts .accountDetails form p {
+  margin: 0.75rem 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+.accounts .accountDetails form .roleIdField {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin-top: 0.75rem;
+}
+.accounts .accountDetails form .roleIdField label {
+  margin-bottom: 5px;
+  opacity: 0.8;
+  font-size: 14px;
+  font-weight: 600;
+}
+.accounts .accountDetails form .roleIdField input {
+  padding: 0.45rem 0.65rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  opacity: 0.8;
+  margin-left: 1rem;
+  width: 10ch;
+}
+.accounts .accountDetails form .updateRoleId {
+  width: 20ch;
+  margin: auto;
+  margin-top: 2rem;
+  background-color: rgb(68, 224, 146);
+  color: black;
 }
 /*# sourceMappingURL=main.css.map */

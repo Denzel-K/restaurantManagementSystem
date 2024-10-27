@@ -33,6 +33,8 @@ const handlebars = hbs.create({
 
     gte: (a, b) => a >= b,
 
+    isSuperAdmin: (role_id) => role_id === 1,
+
     json: (context) => JSON.stringify(context),
   },
   extname: '.hbs',

@@ -1,0 +1,134 @@
+@import 'variables';
+
+
+.accounts{
+  @include flexbox(column, center, center, nowrap, 20px);
+  width: 100%;
+
+  .userAccounts {
+    @include flexbox(column, center, center, nowrap, 10px);
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 1.5rem;
+
+    .roleID_keyMap{
+      @include flexbox(column, start, start);
+      padding: 1.5rem 1rem;
+      width: 100%;
+      border: 1.5px solid lightgray;
+      border-radius: 4px;
+
+      h3{
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: rgb(49, 48, 48);
+      }
+
+      .roleContainer{
+        margin-top: 1rem;
+        @include flexbox(row, start, center, nowrap, 16px);
+
+        @media(max-width: 600px){
+          @include flexbox(column, start, start, nowrap, 10px);
+        }
+
+        .role{
+          border: 1.5px solid #e3e6e7;
+          padding: 1.25rem .8rem;
+          border-radius: 4px;
+          font-size: 14px;
+
+          @media(max-width: 600px){
+            padding: .8rem .65rem;
+            width: 20ch;
+          }
+
+          @media(max-width: 330px){
+            font-size: 12px;
+          }
+          
+          span:nth-child(1){
+            color: #252424;         
+            font-weight: 700;
+          }
+          span:nth-child(2){
+            color: #474747;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .accountDetails {
+    @include flexbox(column, center, center);
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    .backBox{
+      width: 100%;
+      padding-bottom: 1rem 0;
+      @include flexbox(row, end, center);
+
+      button{
+        border: 1.6px solid gray;
+        color: black;
+
+        &:hover{
+          background-color: #ccc;
+        }
+      }
+    }
+
+    h3 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      p {
+        margin: 0.75rem 0;
+        font-size: 14px;
+        opacity: .8;
+      }
+
+      .roleIdField{
+        @include flexbox(row, start, center);
+        margin-top: .75rem;
+
+        label {
+          margin-bottom: 5px;
+          opacity: .8;
+          font-size: 14px;
+          font-weight: 600;
+        }
+    
+        input {
+          padding: .45rem .65rem;
+          font-size: 14px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          opacity: .8;
+          margin-left: 1rem;
+          width: 10ch;
+        }
+      }
+
+      .updateRoleId{
+        width: 20ch;
+        margin: auto;
+        margin-top: 2rem;
+        background-color: rgb(68, 224, 146);
+        color: black;
+      }
+    }
+  }
+}

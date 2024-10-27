@@ -21,36 +21,53 @@ module.exports.getDashboard = (_req, res) => {
 
 module.exports.renderInventory = async (req, res) => {
   const user = req.user;
+  console.log("User Role ID:", user.role_id);
 
   res.render('inventory', 
     {
       pageTitle: 'Inventory',
       user,
-      email: user.email
+      email: user.email,
+      role_id: user.role_id
     }
   );
 }
 
-module.exports.renderMenu= async (req, res) => {
+module.exports.renderMenu = async (req, res) => {
   const user = req.user;
-  console.log(user);
+
   res.render('menu',
     {
       pageTitle: 'Menu',
       user,
-      email: user.email
+      email: user.email,
+      role_id: user.role_id
     }
   );
 }
 
-module.exports.renderOrders= async (req, res) => {
+module.exports.renderOrders = async (req, res) => {
   const user = req.user;
 
   res.render('orders', 
     {
       pageTitle: 'Order History',
       user,
-      email: user.email
+      email: user.email,
+      role_id: user.role_id
+    }
+  );
+}
+
+module.exports.renderAccounts = async (req, res) => {
+  const user = req.user;
+
+  res.render('accounts', 
+    {
+      pageTitle: 'Accounts',
+      user,
+      email: user.email,
+      role_id: user.role_id
     }
   );
 }

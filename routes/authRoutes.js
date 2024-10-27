@@ -10,6 +10,7 @@ router.get('/dashboard', loadPages.getDashboard);
 router.get('/inventory', authMiddleware, loadPages.renderInventory);
 router.get('/menu', authMiddleware, loadPages.renderMenu);
 router.get('/orders', authMiddleware, loadPages.renderOrders);
+router.get('/accounts', authMiddleware, loadPages.renderAccounts);
 
 router.post('/login', authController.loginUser);
 router.post('/register', authController.registerUser);
@@ -34,5 +35,15 @@ router.post('/api/orders', authController.placeOrder);
 router.get('/api/orders', authController.fetchOrders);
 router.put('/api/orders/:id', authController.updateOrderStatus);
 router.get('/api/orders/:orderId/receipt', authController.getReceipt);
+
+// Accounts routes
+router.get('/api/users', authMiddleware, authController.getPaginatedUsers);
+router.get('/api/users/:id', authMiddleware, authController.getUserById);
+router.put('/api/users/:id', authMiddleware, authController.updateUserRole);
+router.delete('/api/users/:id', authMiddleware, authController.deleteUser);
+
+// Logout
+router.get('/logout', authController.logout);
+
 
 module.exports = router;

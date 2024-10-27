@@ -30,28 +30,32 @@ exports.registerUser = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user and assign them the 'super_admin' role if they are the first user
+    // Assign role based on whether this is the first user
     const [existingUsers] = await db.promise().query('SELECT * FROM users');
     const role_id = existingUsers.length === 0 ? 1 : 4; // '1' -> super_admin, '4' -> general_users/kitchen
-    
+
     // Insert the new user into the database
     const [result] = await db.promise().query(
       'INSERT INTO users (name, email, phone, password, role_id) VALUES (?, ?, ?, ?, ?)',
       [name, email, phone, hashedPassword, role_id]
     );
 
-    // Automatically log in the user by generating a JWT token
-    const token = jwt.sign({ id: result.insertId, email: email }, secretKey, { expiresIn: maxAge });
-    res.cookie ('jwt', token, { httpOnly: true, expiresIn: maxAge });
+    // Generate JWT token with role_id included
+    const token = jwt.sign(
+      { id: result.insertId, email: email, role_id: role_id },
+      secretKey,
+      { expiresIn: maxAge }
+    );
 
-    // Redirect to the same page with the token
+    res.cookie('jwt', token, { httpOnly: true, expires: new Date(Date.now() + maxAge * 1000) });
+
+    // Respond with success and the token
     res.status(201).json({
       success: true,
       message: 'User registered successfully and logged in',
       token,
     });
-  } 
-  catch (error) {
+  } catch (error) {
     console.log("Error: ", error.message);
     res.status(500).json({ message: 'Error registering user', error });
   }
@@ -76,19 +80,26 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ id: foundUser.id, email: foundUser.email }, secretKey, { expiresIn: maxAge });
-    res.cookie ('jwt', token, { httpOnly: true, expiresIn: maxAge });
+    // Generate JWT token with role_id included
+    const token = jwt.sign(
+      { id: foundUser.id, email: foundUser.email, role_id: foundUser.role_id },
+      secretKey,
+      { expiresIn: maxAge }
+    );
 
-    // Redirect to the same page with the token
+    res.cookie('jwt', token, { httpOnly: true, expires: new Date(Date.now() + maxAge * 1000) });
+
+    // Respond with success and the token
     res.status(200).json({
       message: 'Login successful',
       token,
     });
   } catch (error) {
+    console.log("Error: ", error.message);
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
+
 
 // Inventory fetch
 module.exports.getInventory = async (_req, res) => {
@@ -466,8 +477,75 @@ module.exports.getReceipt = async (req, res) => {
       status: order.status,
       updated_at: order.updated_at
     });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error fetching order receipt:', error);
     res.status(500).json({ error: 'Failed to retrieve order receipt' });
   }
 };
+
+
+// Get paginated users
+exports.getPaginatedUsers = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  try {
+    const [users] = await db.promise().query(
+      'SELECT * FROM users LIMIT ? OFFSET ?', [limit, offset]
+    );
+    const [[{ count }]] = await db.promise().query('SELECT COUNT(*) AS count FROM users');
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({ users, totalPages });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
+  }
+};
+
+// Get a user by ID
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [user] = await db.promise().query('SELECT * FROM users WHERE id = ?', [id]);
+    if (user.length === 0) return res.status(404).json({ message: 'User not found' });
+    res.json(user[0]);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user', error });
+  }
+};
+
+// Update user role
+exports.updateUserRole = async (req, res) => {
+  const { id } = req.params;
+  const { role_id } = req.body;
+
+  try {
+    await db.promise().query('UPDATE users SET role_id = ? WHERE id = ?', [role_id, id]);
+    res.status(200).json({ message: 'User role updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user role', error });
+  }
+};
+
+// Delete a user
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await db.promise().query('DELETE FROM users WHERE id = ?', [id]);
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting user', error });
+  }
+};
+
+
+
+// Logout
+module.exports.logout = (req, res) => {
+  res.cookie ("jwt", '', {maxAge: 1});
+  res.redirect ("/");
+}
