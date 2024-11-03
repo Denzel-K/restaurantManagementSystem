@@ -1,3 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 * {
   padding: 0;
   margin: 0;
@@ -102,8 +110,8 @@ body {
 }
 @media (max-width: 480px) {
   .authContainer {
-    margin: 20px auto;
-    padding: 10px;
+    margin: 3rem auto;
+    padding: 1.5rem 1rem;
     width: 95%;
   }
   input, button {
@@ -136,13 +144,26 @@ body {
 .newBox button span {
   color: rgb(27, 66, 92);
   font-size: 14px;
+  font-weight: 600;
 }
 .newBox button img {
-  width: 28px;
-  margin-left: 8px;
+  width: 26px;
+  margin-left: 10px;
 }
 .newBox button:hover {
   background-color: #ddd9d9;
+}
+@media (max-width: 780px) {
+  .newBox button {
+    padding: 0.35rem 0.75rem;
+  }
+  .newBox button span {
+    font-size: 12px;
+  }
+  .newBox button img {
+    width: 22px;
+    margin-left: 8px;
+  }
 }
 
 .menuNewBox {
@@ -179,7 +200,9 @@ body {
 }
 
 .processOrderBox {
-  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  max-width: 1200px;
+  margin: auto;
   width: 100%;
 }
 .processOrderBox button {
@@ -207,13 +230,18 @@ body {
   flex-wrap: nowrap;
   gap: 0;
   width: 100%;
-  border-bottom: 1.5px solid rgb(187, 187, 187);
+  border-bottom: 1.5px solid rgb(214, 211, 211);
 }
 .authPage .authHeader .logo {
   padding: 1.5rem 1rem;
   font-size: 1.25rem;
   font-weight: 700;
   color: #11253a;
+}
+@media (max-width: 600px) {
+  .authPage .authHeader .logo {
+    font-size: 1.05rem;
+  }
 }
 .authPage .authHeader .authFormLinks {
   display: flex;
@@ -224,6 +252,11 @@ body {
   gap: 0;
   width: 180px;
 }
+@media (max-width: 600px) {
+  .authPage .authHeader .authFormLinks {
+    width: 160px;
+  }
+}
 .authPage .authHeader .authFormLinks > div {
   color: #074e99;
   font-size: 14px;
@@ -233,6 +266,60 @@ body {
 .authPage .authHeader .authFormLinks > div:hover {
   cursor: pointer;
   color: #199edb;
+}
+
+.unauthorized {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  max-width: 1200px;
+  height: 90vh;
+  width: 100%;
+}
+.unauthorized .unAuthMessage {
+  margin-top: -8rem;
+  max-width: 600px;
+  width: 100%;
+  padding: 3.5rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  border: 1.5px solid rgb(218, 211, 211);
+  background-color: rgb(236, 234, 234);
+  border-radius: 10px;
+}
+@media (max-width: 600px) {
+  .unauthorized .unAuthMessage {
+    width: 90%;
+  }
+}
+.unauthorized .unAuthMessage img {
+  width: 100px;
+}
+.unauthorized .unAuthMessage p {
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #03101f;
+  opacity: 0.85;
+}
+.unauthorized .unAuthMessage .goBackFromUnauth {
+  margin-top: 1.85rem;
+  width: 50%;
+  background-color: #f30857;
+  color: white;
+}
+@media (max-width: 600px) {
+  .unauthorized .unAuthMessage .goBackFromUnauth {
+    width: 65%;
+  }
 }
 
 .dashContainer {
@@ -275,6 +362,11 @@ body {
     width: 60px;
   }
 }
+@media (max-width: 600px) {
+  .dashContainer .sidebar {
+    width: 50px;
+  }
+}
 .dashContainer .sidebar .sideLogo {
   width: 100%;
   padding: 0 1rem;
@@ -286,14 +378,15 @@ body {
   gap: 0;
 }
 .dashContainer .sidebar .sideLogo span {
+  font-family: "Libre Franklin", sans-serif;
   font-size: 22px;
   font-weight: 700;
-  color: rgb(41, 39, 39);
+  color: rgb(117, 248, 220);
 }
 @media (max-width: 1040px) {
   .dashContainer .sidebar .sideLogo span {
     display: none;
-    font-size: 20px;
+    font-size: 16px;
   }
 }
 .dashContainer .sidebar .sideLogo img {
@@ -315,9 +408,26 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   gap: 0;
-  margin-top: 2.5rem;
+  margin-top: 1.25rem;
+  padding-top: 2rem;
   width: 100%;
   height: 100%;
+  border-top: 2px solid rgb(129, 129, 129);
+}
+@media (max-width: 1040px) {
+  .dashContainer .sidebar .pageLinks {
+    margin-top: 1.4rem;
+  }
+}
+@media (max-width: 780px) {
+  .dashContainer .sidebar .pageLinks {
+    margin-top: 0.85rem;
+  }
+}
+@media (max-width: 600px) {
+  .dashContainer .sidebar .pageLinks {
+    margin-top: 0.65rem;
+  }
 }
 .dashContainer .sidebar .pageLinks a {
   display: flex;
@@ -388,7 +498,7 @@ body {
 }
 @media (max-width: 1040px) {
   .dashContainer .dashBody {
-    padding-left: 60px;
+    padding-left: 50px;
   }
 }
 .dashContainer .dashBody .dashHead {
@@ -410,14 +520,25 @@ body {
 }
 @media (max-width: 1040px) {
   .dashContainer .dashBody .dashHead {
-    padding-left: 60px;
+    padding-left: 50px;
   }
 }
 .dashContainer .dashBody .dashHead .currentPage {
   padding: 0 1.65rem;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: rgb(53, 50, 50);
+}
+@media (max-width: 600px) {
+  .dashContainer .dashBody .dashHead .currentPage {
+    padding: 0 0.65rem;
+    font-size: 1.15rem;
+  }
+}
+@media (max-width: 380px) {
+  .dashContainer .dashBody .dashHead .currentPage {
+    font-size: 0.9rem;
+  }
 }
 .dashContainer .dashBody .dashHead .profileBox {
   padding: 0 1.65rem;
@@ -428,24 +549,42 @@ body {
   flex-wrap: nowrap;
   gap: 0;
 }
+@media (max-width: 600px) {
+  .dashContainer .dashBody .dashHead .profileBox {
+    padding: 0 0.65rem;
+  }
+}
 .dashContainer .dashBody .dashHead .profileBox img {
   width: 40px;
 }
+@media (max-width: 780px) {
+  .dashContainer .dashBody .dashHead .profileBox img {
+    width: 32px;
+  }
+}
+@media (max-width: 600px) {
+  .dashContainer .dashBody .dashHead .profileBox img {
+    width: 28px;
+  }
+}
 .dashContainer .dashBody .dashHead .profileBox span {
   font-weight: 600;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   margin-left: 0.55rem;
+}
+@media (max-width: 600px) {
+  .dashContainer .dashBody .dashHead .profileBox span {
+    font-size: 1rem;
+    margin-left: 0.25rem;
+  }
+}
+@media (max-width: 380px) {
+  .dashContainer .dashBody .dashHead .profileBox span {
+    font-size: 0.85rem;
+  }
 }
 .dashContainer .dashBody .dashHead .userProfileBox span {
   color: rgb(18, 51, 18);
-}
-.dashContainer .dashBody .dashHead .bizProfileBox span {
-  color: rgb(38, 13, 77);
-  margin-top: 4px;
-}
-.dashContainer .dashBody .dashHead .adminProfileBox span {
-  color: rgb(82, 74, 5);
-  margin-top: 4px;
 }
 .dashContainer .dashBody .dashMain {
   display: flex;
@@ -460,7 +599,7 @@ body {
 }
 @media (max-width: 600px) {
   .dashContainer .dashBody .dashMain {
-    padding: 5rem 0.8rem 0.5rem 0.8rem;
+    padding: 4rem 0.5rem 1rem 0.5rem;
   }
 }
 .dashContainer .dashBody .dashMain .hidden {
@@ -511,8 +650,19 @@ body {
   border-radius: 4px;
   margin-top: 1rem;
 }
+@media (max-width: 600px) {
+  .inventory .stock #category-buttons {
+    padding: 1.25rem 0.8rem;
+    gap: 8px;
+  }
+}
 .inventory .stock #category-buttons button {
   border: 1.5px solid lightgray;
+}
+@media (max-width: 600px) {
+  .inventory .stock #category-buttons button {
+    padding: 0.45rem 0.75rem;
+  }
 }
 .inventory .item-details {
   display: flex;
@@ -527,6 +677,11 @@ body {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+@media (max-width: 600px) {
+  .inventory .item-details {
+    padding: 1.25rem 0.8rem;
+  }
 }
 .inventory .item-details h3 {
   margin-bottom: 20px;
@@ -732,16 +887,16 @@ table td {
 .menuActions .menuActionBtns button {
   padding: 0.45rem 0.75rem;
 }
-.menuActions .menuActionBtns button:nth-child(1) {
+.menuActions .menuActionBtns .edit-item {
   background-color: rgb(28, 151, 233);
   color: rgb(235, 230, 230);
 }
-.menuActions .menuActionBtns button:nth-child(2) {
+.menuActions .menuActionBtns .delete-item {
   background-color: rgb(233, 28, 96);
   color: rgb(235, 230, 230);
   margin-left: 4px;
 }
-.menuActions .menuActionBtns button:nth-child(3) {
+.menuActions .menuActionBtns .make-order {
   background-color: rgb(87, 85, 88);
   color: rgb(235, 230, 230);
   margin-left: 4px;
@@ -798,8 +953,19 @@ table td {
   border-radius: 4px;
   margin-top: 1rem;
 }
+@media (max-width: 600px) {
+  .menu .menu-stock #category-buttons {
+    padding: 1.25rem 0.8rem;
+    gap: 8px;
+  }
+}
 .menu .menu-stock #category-buttons button {
   border: 1.5px solid lightgray;
+}
+@media (max-width: 600px) {
+  .menu .menu-stock #category-buttons button {
+    padding: 0.45rem 0.75rem;
+  }
 }
 .menu .menu-item-details {
   display: flex;
@@ -814,6 +980,11 @@ table td {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+@media (max-width: 600px) {
+  .menu .menu-item-details {
+    padding: 1rem 0.75rem;
+  }
 }
 .menu .menu-item-details h3 {
   margin-bottom: 20px;
@@ -1062,8 +1233,19 @@ table td {
   border-radius: 4px;
   margin-top: 1rem;
 }
+@media (max-width: 600px) {
+  .orders .orderHistory #category-buttons {
+    padding: 1.25rem 0.8rem;
+    gap: 8px;
+  }
+}
 .orders .orderHistory #category-buttons button {
   border: 1.5px solid lightgray;
+}
+@media (max-width: 600px) {
+  .orders .orderHistory #category-buttons button {
+    padding: 0.45rem 0.75rem;
+  }
 }
 .orders .orderDetails {
   display: flex;

@@ -47,7 +47,7 @@
 
               <div class="role">
                 <span>4</span> -
-                <span>Kitchen</span>
+                <span>General User</span>
               </div>
             </div>
           </div>
@@ -96,7 +96,13 @@
 
 {{else}}
 <section class="unauthorized">
-  <p>You are not authorized to access this page.</p>
+  <div class="unAuthMessage">
+    <img src="images/unauthorized.svg" alt="unauthorized">
+    <p>You are not authorized to access this page.</p>
+    <button type="button" class="goBackFromUnauth">
+      Go back
+    </button>
+  </div>
 </section>
 {{/if}}
 
@@ -134,4 +140,6 @@
       });
     })
   });
+
+  document.querySelector('.goBackFromUnauth').addEventListener('click', () => location.assign('/menu'));
 </script>

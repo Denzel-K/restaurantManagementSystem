@@ -42,8 +42,13 @@ router.get('/api/users/:id', authMiddleware, authController.getUserById);
 router.put('/api/users/:id', authMiddleware, authController.updateUserRole);
 router.delete('/api/users/:id', authMiddleware, authController.deleteUser);
 
+// Fetch role id
+router.get('/api/user-info', authMiddleware, (req, res) => {
+  const { id, role_id } = req.user;
+  res.json({ userId: id, roleId: role_id });
+})
+
 // Logout
 router.get('/logout', authController.logout);
-
 
 module.exports = router;

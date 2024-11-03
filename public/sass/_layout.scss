@@ -20,7 +20,7 @@ body {
   form {
     display: flex;
     flex-direction: column;
-    
+
     h2 {
       text-align: center;
       margin-bottom: 20px;
@@ -102,8 +102,8 @@ body {
 
 @media (max-width: 480px) {
   .authContainer {
-    margin: 20px auto;
-    padding: 10px;
+    margin: 3rem auto;
+    padding: 1.5rem 1rem;
     width: 95%;
   }
 
@@ -130,15 +130,28 @@ body {
     span {
       color: rgb(27, 66, 92);
       font-size: 14px;
+      font-weight: 600;
     }
 
     img {
-      width: 28px;
-      margin-left: 8px;
+      width: 26px;
+      margin-left: 10px;
     }
 
     &:hover {
       background-color: #ddd9d9;
+    }
+
+    @media(max-width: 780px){
+      padding: .35rem .75rem;
+
+      span {
+        font-size: 12px;
+      }
+      img {
+        width: 22px;
+        margin-left: 8px;
+      }
     }
   }
 }
@@ -173,7 +186,9 @@ body {
 }
 
 .processOrderBox{
-  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  max-width: 1200px;
+  margin: auto;
   width: 100%;
 
   button{
@@ -192,18 +207,26 @@ body {
   .authHeader{
     @include flexbox(row, space-between, center);
     width: 100%;
-    border-bottom: 1.5px solid rgb(187, 187, 187);
+    border-bottom: 1.5px solid rgb(214, 211, 211);
 
     .logo{
       padding: 1.5rem 1rem;
       font-size: 1.25rem;
       font-weight: 700;
       color:#11253a;
+
+      @media(max-width: 600px){
+        font-size: 1.05rem;
+      }
     }
 
     .authFormLinks{
       @include flexbox(row, space-around, center);
       width: 180px;
+
+      @media(max-width: 600px){
+        width: 160px;
+      }
 
       & > div{
         color: #074e99;
@@ -215,6 +238,50 @@ body {
           cursor: pointer;
           color:#199edb;
         }
+      }
+    }
+  }
+}
+
+.unauthorized{
+  @include flexbox(column, center, center);
+  max-width: 1200px;
+  height: 90vh;
+  width: 100%;
+
+  .unAuthMessage{
+    margin-top: -8rem;
+    max-width: 600px;
+    width: 100%;
+    padding: 3.5rem 1rem 1.5rem 1rem;
+    @include flexbox(column, start, center);
+    border: 1.5px solid rgb(218, 211, 211);
+    background-color: rgb(236, 234, 234);
+    border-radius: 10px;
+
+    @media(max-width: 600px){
+      width: 90%;
+    }
+
+    img{
+      width: 100px;
+    }
+    p{
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #03101f;
+      opacity: .85;
+    }
+    .goBackFromUnauth{
+      margin-top: 1.85rem;
+      width: 50%;
+      background-color: #f30857;
+      color: white;
+
+      @media(max-width: 600px){
+        width: 65%;
       }
     }
   }

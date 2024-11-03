@@ -24,12 +24,14 @@
       <section class="menu">
         <div class="menu-stock">
           <div class="newBox menuNewBox">
-            <button class="addNewMenuItem" type="button">
-              <span>Add Item</span>
-              <img src="images/add.svg" alt="add">
-            </button>
+            {{#if (isAdminManager user.role_id)}}
+              <button class="addNewMenuItem" type="button" onclick="addMenuItemReveal()">
+                <span>Add Item</span>
+                <img src="images/add.svg" alt="add">
+              </button>
+            {{/if}}
 
-            <button class="newOrder" type="button">
+            <button class="newOrder" type="button" onclick='enableNewOrder()'>
               <span>New order</span>
               <img src="images/add.svg" alt="add">
             </button>

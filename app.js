@@ -35,6 +35,14 @@ const handlebars = hbs.create({
 
     isSuperAdmin: (role_id) => role_id === 1,
 
+    isAdminManager: (role_id) => role_id !== 3,
+
+    isManager: (role_id) => role_id === 2,
+
+    isCashier: (role_id) => role_id === 3,
+
+    isGeneralUser: (role_id) => role_id === 4,
+
     json: (context) => JSON.stringify(context),
   },
   extname: '.hbs',

@@ -19,8 +19,17 @@
       border-radius: 4px;
       margin-top: 1rem;
 
+      @media(max-width: 600px){
+        padding: 1.25rem .8rem;
+        gap: 8px;
+      }
+
       button {
         border: 1.5px solid lightgray;
+
+        @media(max-width: 600px){
+          padding: .45rem .75rem;
+        }
       }
     }
   }
@@ -33,6 +42,10 @@
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
+
+    @media(max-width: 600px){
+      padding: 1rem .75rem;
+    }
 
     h3 {
       margin-bottom: 20px;

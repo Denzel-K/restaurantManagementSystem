@@ -59,16 +59,16 @@ table {
       padding: .45rem .75rem;
     }
 
-    button:nth-child(1) {
+    .edit-item {
       background-color: rgb(28, 151, 233);
       color: rgb(235, 230, 230);
     }
-    button:nth-child(2) {
+    .delete-item {
       background-color: rgb(233, 28, 96);
       color: rgb(235, 230, 230);
       margin-left: 4px;
     }
-    button:nth-child(3) {
+    .make-order {
       background-color: rgb(87, 85, 88);
       color: rgb(235, 230, 230);
       margin-left: 4px;

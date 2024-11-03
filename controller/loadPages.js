@@ -21,7 +21,6 @@ module.exports.getDashboard = (_req, res) => {
 
 module.exports.renderInventory = async (req, res) => {
   const user = req.user;
-  console.log("User Role ID:", user.role_id);
 
   res.render('inventory', 
     {

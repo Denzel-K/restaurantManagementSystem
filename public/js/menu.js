@@ -1,9 +1,23 @@
-document.addEventListener("DOMContentLoaded", () => {
+//document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   const itemsPerPage = 10;
   let menuItems = [];
   let filteredItems = [];
   let orderItems = [];
+  let isOrderInitiated = false;
+  let userRoleId;
+
+  // Function to fetch userInfo(check role Id for conditional rendering)
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch('/api/user-info');
+      const data = await response.json();
+      userRoleId = data.roleId;
+    } 
+    catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
 
   // Function to fetch menu items from the server
   const fetchMenuItems = async () => {
@@ -39,8 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <td data-label="Category">${item.category}</td>
         <td class="menuActions" data-label="Actions">
           <div class="menuActionBtns">
-            <button class="edit-item" data-id="${item.id}">Edit</button>
-            <button class="delete-item" data-id="${item.id}">Delete</button>
+            ${userRoleId === 1 || userRoleId === 2 ? `<button class="edit-item" data-id="${item.id}">Edit</button>` : ''}
+          ${userRoleId === 1 ? `<button class="delete-item" data-id="${item.id}">Delete</button>` : ''}
             <button class="make-order" data-id="${item.id}">Order</button>
           </div>
         </td>
@@ -105,39 +119,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Disable all order buttons initially
-    const orderButtons = document.querySelectorAll('.make-order');
-    orderButtons.forEach(button => button.style.display = 'none');
+    if(isOrderInitiated === false){
+      console.log('Disabling orderBtns; isOrderInitiated?', isOrderInitiated);
+      const orderButtons = document.querySelectorAll('.make-order');
+      orderButtons.forEach(button => button.style.display = 'none');
+    } 
+    else if(isOrderInitiated === true){
+      console.log('Enabling orderBtns; isOrderInitiated?', isOrderInitiated);
+      const orderButtons = document.querySelectorAll('.make-order');
 
-    // Handle 'Make Order' button clicks
-    document.querySelectorAll('.make-order').forEach(button => {
-      button.addEventListener('click', async () => {
-        console.log("Initiating order placement");
-        const itemId = button.dataset.id;
-
-        // Fetch item details based on itemId
-        const itemDetails = await fetchItemDetails(itemId);
-        
-        if (!itemDetails) {
-          alert('Error fetching item details.');
-          return;
-        }
-
-        // Add item details to orderItems array if not already present
-        if (!orderItems.some(orderItem => orderItem.id === itemId)) {
-          orderItems.push({
-            id: itemDetails.id,
-            name: itemDetails.item_name,
-            description: itemDetails.description,
-            price: itemDetails.price,
-            category: itemDetails.category,
-            quantity: 1
-          });
-
-          //localStorage.setItem('orderItems', JSON.stringify(orderItems));
-        }
+      // Allow selection of items
+      const menuTableRows = document.querySelectorAll('#menu-table-body tr');
+      menuTableRows.forEach(row => {
+        row.addEventListener('click', function() {
+          this.classList.toggle('selected');
+        });
       });
-    });
+
+      orderButtons.forEach(button => {
+        button.style.display = 'block';
+        
+        // Handle 'Make Order' button clicks
+        button.addEventListener('click', async () => {
+          const itemId = button.dataset.id;
+  
+          // Fetch item details based on itemId
+          const itemDetails = await fetchItemDetails(itemId);
+          
+          if (!itemDetails) {
+            alert('Error fetching item details.');
+            return;
+          }
+
+          console.log("Item added to draft.");
+  
+          // Add item details to orderItems array if not already present
+          console.log('orderItems: ', orderItems);
+
+          if (!orderItems.some(orderItem => orderItem.id === itemId)) {
+            orderItems.push({
+              id: itemDetails.id,
+              name: itemDetails.item_name,
+              description: itemDetails.description,
+              price: itemDetails.price,
+              category: itemDetails.category,
+              quantity: 1
+            });
+          }
+
+          console.log('orderItems: ', orderItems);
+        });
+      });
+    }
   };
+
+  // Initial fetch of menu items and role_id check
+  const initialize = async () => {
+    await fetchUserInfo();
+    await fetchMenuItems();
+  };
+  
+  initialize();
+  
 
   // Function to add a menu item to the server
   const addMenuItem = async (item) => {
@@ -271,10 +314,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Show add-item form
-  document.querySelector('.addNewMenuItem').addEventListener('click', () => {
+  function addMenuItemReveal(){
     document.querySelector('.menu-stock').style = 'display: none';
     document.querySelector('.addMenuItem').style = 'display: block';
-  })
+  }
 
   //Back to stock from addForm
   document.getElementById('back-to-menu2').addEventListener('click', () => {
@@ -283,11 +326,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // -> ORDERS
-  // Initiate order
-  document.querySelector('.newOrder').addEventListener('click', () => {
+  function initiateOrderPlacement(){
     // Enable all order buttons
     const orderButtons = document.querySelectorAll('.make-order');
     orderButtons.forEach(button => button.style.display = 'block');
+    console.log('Order initiation called: ', isOrderInitiated);
 
     // Allow selection of items
     const menuTableRows = document.querySelectorAll('#menu-table-body tr');
@@ -299,7 +342,49 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Make 'Process' button visible
     document.querySelector('.processOrderBox').style.display = 'block';
-  });
+  }
+
+  // Initiate order
+  // document.querySelector('.newOrder').addEventListener('click', () => {
+  //   // Enable all order buttons
+  //   isOrderInitiated = true;
+  //   initiateOrderPlacement();
+
+  //   const orderButtons = document.querySelectorAll('.make-order');
+
+  //   orderButtons.forEach(button => {      
+  //     // Handle 'Make Order' button clicks
+  //     button.addEventListener('click', async () => {
+  //       const itemId = button.dataset.id;
+
+  //       // Fetch item details based on itemId
+  //       const itemDetails = await fetchItemDetails(itemId);
+        
+  //       if (!itemDetails) {
+  //         alert('Error fetching item details.');
+  //         return;
+  //       }
+
+  //       console.log("Item added to draft.");
+
+  //       // Add item details to orderItems array if not already present
+  //       console.log('orderItems: ', orderItems);
+
+  //       if (!orderItems.some(orderItem => orderItem.id === itemId)) {
+  //         orderItems.push({
+  //           id: itemDetails.id,
+  //           name: itemDetails.item_name,
+  //           description: itemDetails.description,
+  //           price: itemDetails.price,
+  //           category: itemDetails.category,
+  //           quantity: 1
+  //         });
+  //       }
+
+  //       console.log('orderItems: ', orderItems);
+  //     });
+  //   });
+  // });
 
   // Fetch item details from server
   async function fetchItemDetails(itemId) {
@@ -367,18 +452,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const processOrder = document.querySelector('.processOrderBox button');
 
   processOrder.addEventListener('click', () => {
-    const selectedItems = document.querySelectorAll('#menu-table-body tr.selected');
+    //const selectedItems = document.querySelectorAll('#menu-table-body tr.selected');
     const orderContainer = document.querySelector('.orderContainer .order-items');
     document.querySelector('.menu-stock').style.display = 'none';
     processOrder.style.display = 'none';
 
     // Clear previous order items
-    orderContainer.innerHTML = '';
+    //orderContainer.innerHTML = '';
 
     // Add selected items to the order container
-    selectedItems.forEach(item => {
-      const itemName = item.querySelector('td:nth-child(2)').textContent;
-      const itemPrice = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace(/[^0-9.-]+/g,"")); // Ensure price is a number
+    orderItems.forEach(item => {
+      const itemName = item.name;
+      const itemPrice = parseFloat(item.price.replace(/[^0-9.-]+/g, ""));
 
       const orderItem = `
         <div class="order-item">
@@ -395,7 +480,30 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       orderContainer.innerHTML += orderItem;
-    });
+    })
+
+    // selectedItems.forEach(item => {
+      
+
+    //   const itemName = item.querySelector('td:nth-child(2)').textContent;
+    //   const itemPrice = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace(/[^0-9.-]+/g,"")); // Ensure price is a number
+
+    //   const orderItem = `
+    //     <div class="order-item">
+    //       <div class="orderItemDetails">
+    //         <p><strong>${itemName}:</strong> $<span class="item-price">${itemPrice.toFixed(2)}</span></p>
+    //         <div class="quantityField">
+    //           <label for="quantity-${itemName}">Quantity:</label>
+    //           <input type="number" class="quantity-input" id="quantity-${itemName}" name="quantity-${itemName}" value="1" min="1" />
+    //         </div>
+    //       </div>
+          
+    //       <button class="remove-item">Remove</button>
+    //     </div>
+    //   `;
+
+    //   orderContainer.innerHTML += orderItem;
+    // });
 
     // Show the order container
     document.querySelector('.orderContainer').style.display = 'block';
@@ -517,6 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } 
       else {
         const errorText = await response.text();
+        alert('Failed to place order: ', errorText);
         console.error('Failed to place order:', errorText);
       }
     } 
@@ -524,7 +633,45 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error('Error placing order:', error);
     }
   });
-  
-  // Initial fetch of menu items
-  fetchMenuItems();
-});
+// });
+
+function enableNewOrder(){
+  // Enable all order buttons
+  isOrderInitiated = true;
+  initiateOrderPlacement();
+
+  const orderButtons = document.querySelectorAll('.make-order');
+
+  orderButtons.forEach(button => {      
+    // Handle 'Make Order' button clicks
+    button.addEventListener('click', async () => {
+      const itemId = button.dataset.id;
+
+      // Fetch item details based on itemId
+      const itemDetails = await fetchItemDetails(itemId);
+      
+      if (!itemDetails) {
+        alert('Error fetching item details.');
+        return;
+      }
+
+      console.log("Item added to draft.");
+
+      // Add item details to orderItems array if not already present
+      console.log('orderItems: ', orderItems);
+
+      if (!orderItems.some(orderItem => orderItem.id === itemId)) {
+        orderItems.push({
+          id: itemDetails.id,
+          name: itemDetails.item_name,
+          description: itemDetails.description,
+          price: itemDetails.price,
+          category: itemDetails.category,
+          quantity: 1
+        });
+      }
+
+      console.log('orderItems: ', orderItems);
+    });
+  });
+}

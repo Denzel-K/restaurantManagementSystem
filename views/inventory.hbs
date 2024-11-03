@@ -24,12 +24,14 @@
       <div class="dashMain userDashMain">
         <section class="inventory">
           <div class="stock">
+            {{#if (isAdminManager user.role_id)}}
             <div class="newBox">
               <button class="addNewItem" type="button">
                 <span>Add Item</span>
                 <img src="images/add.svg" alt="add">
               </button>
             </div>
+            {{/if}}
 
             <div id="category-buttons"></div>
 
