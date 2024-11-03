@@ -2,6 +2,26 @@ let currentPage = 1;
 let itemsPerPage = 10;
 let inventoryData = [];
 let selectedCategory = '';
+let userRoleId;
+
+// Function to fetch userInfo(check role Id for conditional rendering)
+const fetchUserInfo = async () => {
+  try {
+    const response = await fetch('/api/user-info');
+    const data = await response.json();
+    userRoleId = data.roleId;
+
+
+    //Conditional rendering
+    if((userRoleId === 3) || (userRoleId === 4)){
+      document.querySelector('#newBoxConditional').style.display = 'none';
+      document.querySelector('.action_col_head').style.display = 'none';
+    }
+  } 
+  catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+};
 
 // Fetch inventory data from the server
 async function fetchInventory() {
@@ -60,7 +80,7 @@ function renderInventoryTable() {
       <td data-label="Quantity">${item.quantity}</td>
       <td data-label="Unit Price">${item.unit_price}</td>
       <td data-label="Reorder Level">${item.reorder_level}</td>
-      <td data-label="Action"><button class="actionBtn" onclick="showItemDetails(${item.id})">View</button></td>
+      ${userRoleId === 1 || userRoleId === 2 ? `<td data-label="Action"><button class="actionBtn" onclick="showItemDetails(${item.id})">View</button></td>`: ''}
     `;
     tableBody.appendChild(row);
   });
@@ -176,10 +196,11 @@ document.getElementById('back-to-stock').addEventListener('click', () => {
 });
 
 // Show add-item form
-document.querySelector('.addNewItem').addEventListener('click', () => {
+function revealAddNewItemForm(){
   document.querySelector('.stock').style = 'display: none';
   document.querySelector('.addItem').style = 'display: block';
-})
+}
+
 
 //Back to stock from addForm
 document.getElementById('back-to-stock2').addEventListener('click', () => {
@@ -202,8 +223,13 @@ document.getElementById('next').addEventListener('click', () => {
   }
 });
 
-// Initial load
-fetchInventory();
+// Initial fetch of inventory items and role_id check
+const initialize = async () => {
+  await fetchUserInfo();
+  await fetchInventory();
+};
+
+initialize();
 
 
 // Function to handle form submissions

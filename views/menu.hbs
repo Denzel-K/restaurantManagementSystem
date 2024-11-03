@@ -1,37 +1,22 @@
 <section class="dashContainer userDash">
   <section class="sidebar">
-    <div class="sideLogo userLogo">
-      <span>FAMIKE PARK</span>
-      <img src="images/menu.svg" alt="menu" class="menuOpen">
-      <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
-    </div>
+    {{>sideLogo}}
 
     {{>pageLinks}}
   </section>
 
   <section class="dashBody">
-    <div class="dashHead">
-      <div class="currentPage">
-        {{pageTitle}}
-      </div>
-
-      <div class="profileBox userProfileBox">
-        <img src="images/userProfile.svg" alt="userProfile">
-        <span>{{email}}</span>
-      </div>
-    </div>
+    {{>dashHead}}
     <div class="dashMain userDashMain">
       <section class="menu">
         <div class="menu-stock">
           <div class="newBox menuNewBox">
-            {{#if (isAdminManager user.role_id)}}
-              <button class="addNewMenuItem" type="button" onclick="addMenuItemReveal()">
-                <span>Add Item</span>
-                <img src="images/add.svg" alt="add">
-              </button>
-            {{/if}}
+            <button class="addNewMenuItem" type="button" onclick="addMenuItemReveal()" id="newBoxConditional">
+              <span>Add Item</span>
+              <img src="images/add.svg" alt="add">
+            </button>
 
-            <button class="newOrder" type="button" onclick='enableNewOrder()'>
+            <button class="newOrder newOrderConditional" type="button" onclick='enableNewOrder()'>
               <span>New order</span>
               <img src="images/add.svg" alt="add">
             </button>
@@ -47,7 +32,7 @@
                 <th>Description</th>
                 <th>Price ($)</th>
                 <th>Category</th>
-                <th>Action</th>
+                <th id="action_col_head">Action</th>
               </tr>
             </thead>
             <tbody id="menu-table-body">

@@ -35,7 +35,7 @@ const handlebars = hbs.create({
 
     isSuperAdmin: (role_id) => role_id === 1,
 
-    isAdminManager: (role_id) => role_id !== 3,
+   // isAdminManager: (role_id) => role_id == 1 || 2,
 
     isManager: (role_id) => role_id === 2,
 

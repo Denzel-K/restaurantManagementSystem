@@ -1,26 +1,13 @@
 {{#if (isSuperAdmin user.role_id)}}
 <section class="dashContainer userDash">
   <section class="sidebar">
-    <div class="sideLogo userLogo">
-      <span>FAMIKE PARK</span>
-      <img src="images/menu.svg" alt="menu" class="menuOpen">
-      <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
-    </div>
+    {{>sideLogo}}
 
     {{>pageLinks}}
   </section>
 
   <section class="dashBody">
-    <div class="dashHead">
-      <div class="currentPage">
-        {{pageTitle}}
-      </div>
-
-      <div class="profileBox userProfileBox">
-        <img src="images/userProfile.svg" alt="userProfile">
-        <span>{{email}}</span>
-      </div>
-    </div>
+    {{>dashHead}}
 
     <div class="dashMain userDashMain">
       <section class="accounts">

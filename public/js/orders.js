@@ -3,6 +3,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const itemsPerPage = 10;
   let orders = [];
   let filteredOrders = [];
+  let userRoleId;
+
+  // Function to fetch userInfo(check role Id for conditional rendering)
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch('/api/user-info');
+      const data = await response.json();
+      userRoleId = data.roleId;
+
+      //Conditional rendering
+      if(userRoleId === 4){
+        document.querySelector('#newOrderConditional').style.display = 'none';
+        document.querySelector('#orderActionCol').style.display = 'none';
+      }
+    } 
+    catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
 
   // Function to fetch orders from the server
   const fetchOrders = async () => {
@@ -33,6 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Initial fetch of orders
+  const initialize = async () => {
+    await fetchUserInfo();
+    fetchOrders();
+  };
+
+  initialize();
+
   // Function to render the table items
   const renderTable = () => {
     const tableBody = document.getElementById("orderHistoryBody");
@@ -51,12 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <td data-label="Payment Method">${order.payment_method}</td>
         <td data-label="Status">${order.status}</td>
         <td data-label="Created At">${new Date(order.created_at).toLocaleString()}</td>
-        <td class="orderActions" data-label="Actions">
-          <div class="actionBtnBox">
-            <button class="view-order orderActioBtn" data-id="${order.id}">Edit</button>
-            <button class="orderReceiptView" data-id="${order.id}">Receipt</button>
-          </div>
-        </td>
+        ${userRoleId !== 4 ? `
+          <td class="orderActions" data-label="Actions">
+            <div class="actionBtnBox">
+              <button class="view-order orderActioBtn" data-id="${order.id}">Edit</button>
+              <button class="orderReceiptView" data-id="${order.id}">Receipt</button>
+            </div>
+          </td>
+        ` : ''}      
       `;
   
       // Append a hidden receipt box for each order
@@ -183,9 +212,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!data) return;
     
       const receiptContent = `
-        <div style="padding: 1.5rem 1rem; border-radius: 8px; max-width: 500px; margin: 0 auto; font-family: Arial, sans-serif; width: 500px;">
+        <div style="padding: 1.5rem 1rem; border-radius: 8px; font-family: Arial, sans-serif; width: 500px;">
           <h3 style="text-align: center; color: #0a3a66;">FAMIKE PARK</h3>
-          <p style="margin-top: 1.5rem;"><strong>Order No:</strong> ${data.order_number}</p>
+          <p style="margin-top: 1.5rem; display: flex; flex-direction: row; align-items: center; justify-content: space-between; width: 100%; padding-bottom: .35rem; border-bottom: 1.6px solid #dbdbe0">
+            <span style="font-size: 14px; font-weight: 700; color: #171644;">Nairobi, Komarock</span>
+            <span style="font-size: 14px; font-weight: 500; color: #2e2d61;">${new Date().toLocaleString()}</span>
+          </p>
+          <p style="margin-top: 2rem;"><strong>Order No:</strong> ${data.order_number}</p>
           <div class="orderItemsInfo" style="margin: 1rem 0; border: 1.5px solid rgb(207, 207, 207); border-radius: 4px; padding: .8rem .65rem; width: 100%;">
             <h4 style="text-align: left; font-size: 1rem; color: rgb(54, 53, 53);">Order Items</h4>
             <ul style="margin-top: .5rem;">
@@ -197,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p style="margin: .65rem 0; opacity: 9;"><strong>Status:</strong> ${data.status}</p>
           <p style="margin: .65rem 0; opacity: 9;"><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
           <p style="margin: .65rem 0; opacity: 9;"><strong>Cashier:</strong> ${data.cashier_name}</p>
-          <hr style="margin: 15px 0;">
+          <hr style="margin: 2rem 0 1rem 0;">
           <p style="text-align: center; font-weight: bold; font-family: 'Arial', sans-serif;">Thank you for your order!</p>
         </div>
       `;
@@ -209,25 +242,16 @@ document.addEventListener("DOMContentLoaded", () => {
         callback: function (doc) {
           doc.save(`receipt-${orderId}.pdf`);
         },
-        x: 10,
+        x: 40,
         y: 10,
         html2canvas: {
           scale: 0.25,        
-          width: 600,      
+          width: 500,      
           windowWidth: 600,
           maxWidth: 600
         }
       });
     };
-    
-    
-  // Attach event listeners to the Print buttons inside the receipts
-  // document.querySelectorAll(".printReceiptBtn").forEach(button => {
-  //   button.addEventListener("click", (e) => {
-  //     const orderId = e.target.getAttribute("data-id");
-  //     generatePDF(orderId);
-  //   });
-  // });
 
     // Attach event listeners to the Close buttons inside the receipts
     document.querySelectorAll(".closeReceiptBtn").forEach(button => {
@@ -329,7 +353,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector('.newOrderRedirect').addEventListener('click', () => {
     window.location.href = '/menu';
   })
-
-  // Initial fetch of orders
-  fetchOrders();
 });

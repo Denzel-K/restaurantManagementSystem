@@ -1,37 +1,22 @@
 <section class="dashContainer userDash">
     <section class="sidebar">
-      <div class="sideLogo userLogo">
-        <span>FAMIKE PARK</span>
-        <img src="images/menu.svg" alt="menu" class="menuOpen">
-        <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
-      </div>
+      {{>sideLogo}}
 
       {{>pageLinks}}
     </section>
 
     <section class="dashBody">
-      <div class="dashHead">
-        <div class="currentPage">
-          {{pageTitle}}
-        </div>
-
-        <div class="profileBox userProfileBox">
-          <img src="images/userProfile.svg" alt="userProfile">
-          <span>{{email}}</span>
-        </div>
-      </div>
+      {{>dashHead}}
 
       <div class="dashMain userDashMain">
         <section class="inventory">
           <div class="stock">
-            {{#if (isAdminManager user.role_id)}}
-            <div class="newBox">
-              <button class="addNewItem" type="button">
+            <div class="newBox" id="newBoxConditional">
+              <button class="addNewItem" type="button" onclick="revealAddNewItemForm()">
                 <span>Add Item</span>
                 <img src="images/add.svg" alt="add">
               </button>
             </div>
-            {{/if}}
 
             <div id="category-buttons"></div>
 
@@ -43,7 +28,7 @@
                   <th>Quantity</th>
                   <th>Unit Price</th>
                   <th>Reorder Level</th>
-                  <th>Action</th>
+                  <th class="action_col_head">Action</th>
                 </tr>
               </thead>
               <tbody id="inventory-table-body">

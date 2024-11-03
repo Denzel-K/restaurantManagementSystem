@@ -1397,6 +1397,10 @@ table td {
   background-color: #e63058;
 }
 
+.qqq {
+  color: #dbdbe0;
+}
+
 .accounts {
   display: flex;
   flex-direction: column;

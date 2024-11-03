@@ -13,6 +13,16 @@
       const response = await fetch('/api/user-info');
       const data = await response.json();
       userRoleId = data.roleId;
+
+      //Conditional rendering
+      if(userRoleId === 3 ){
+        document.querySelector('#newBoxConditional').style.display = 'none';
+      } 
+      else if(userRoleId === 4){
+        document.querySelector('#newBoxConditional').style.display = 'none';
+        document.querySelector('.newOrderConditional').style.display = 'none';
+        document.querySelector('#action_col_head').style.display = 'none';
+      }
     } 
     catch (error) {
       console.error("Error fetching user info:", error);
@@ -51,13 +61,15 @@
         <td data-label="Description">${item.description}</td>
         <td data-label="Price">${item.price}</td>
         <td data-label="Category">${item.category}</td>
-        <td class="menuActions" data-label="Actions">
-          <div class="menuActionBtns">
-            ${userRoleId === 1 || userRoleId === 2 ? `<button class="edit-item" data-id="${item.id}">Edit</button>` : ''}
-          ${userRoleId === 1 ? `<button class="delete-item" data-id="${item.id}">Delete</button>` : ''}
-            <button class="make-order" data-id="${item.id}">Order</button>
-          </div>
-        </td>
+        ${userRoleId !== 4 ? `
+          <td class="menuActions" data-label="Actions">
+            <div class="menuActionBtns">
+              ${userRoleId === 1 || userRoleId === 2 ? `<button class="edit-item" data-id="${item.id}">Edit</button>` : ''}
+            ${userRoleId === 1 || userRoleId === 2 ? `<button class="delete-item" data-id="${item.id}">Delete</button>` : ''}
+              <button class="make-order" data-id="${item.id}">Order</button>
+            </div>
+          </td>
+        ` : ''}
       `;
       tableBody.appendChild(row);
       

@@ -1,0 +1,25 @@
+<div class="dashHead">
+  <div class="currentPage">
+    {{pageTitle}}
+  </div>
+
+  <div class="profileBox userProfileBox">
+    {{#if (isSuperAdmin user.role_id)}}
+      <img src="images/shield.svg" alt="superAdminProfile" style="scale: 0.85;">
+    {{/if}}
+
+    {{#if (isManager user.role_id)}}
+      <img src="images/manager.svg" alt="superAdminProfile"  style="scale: 0.8;">
+    {{/if}}
+
+    {{#if (isCashier user.role_id)}}
+      <img src="images/cashier.svg" alt="superAdminProfile"  style="scale: 0.8;">
+    {{/if}}
+
+    {{#if (isGeneralUser user.role_id)}}
+      <img src="images/userProfile.svg" alt="generalUserProfile">
+    {{/if}}
+
+    <span>{{user.email}}</span>
+  </div>
+</div>

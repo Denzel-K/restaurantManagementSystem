@@ -1,31 +1,18 @@
 <section class="dashContainer userDash">
   <section class="sidebar">
-    <div class="sideLogo userLogo">
-      <span>FAMIKE PARK</span>
-      <img src="images/menu.svg" alt="menu" class="menuOpen">
-      <img src="images/closeMenu.svg" alt="menu" class="menuClose hidden">
-    </div>
+    {{>sideLogo}}
 
     {{>pageLinks}}
   </section>
 
   <section class="dashBody">
-    <div class="dashHead">
-      <div class="currentPage">
-        {{pageTitle}}
-      </div>
-
-      <div class="profileBox userProfileBox">
-        <img src="images/userProfile.svg" alt="userProfile">
-        <span>{{email}}</span>
-      </div>
-    </div>
+    {{>dashHead}}
 
     <div class="dashMain userDashMain">
       <section class="orders">
         <div class="orderHistory">
           <div class="newBox">
-            <button class="newOrderRedirect" type="button">
+            <button class="newOrderRedirect" type="button" id="newOrderConditional">
               <span>New order</span>
               <img src="images/add.svg" alt="add">
             </button>
@@ -42,7 +29,7 @@
                 <th>Payment Method</th>
                 <th>Status</th>
                 <th>Created At</th>
-                <th>Actions</th>
+                <th id="orderActionCol">Actions</th>
               </tr>
             </thead>
 
