@@ -120,15 +120,15 @@ module.exports.getInventory = async (_req, res) => {
 
 // Add new item
 module.exports.addItem = async (req, res) => {
-  const { item_name, quantity, unit_price, reorder_level, special_notes, category } = req.body;
+  const { item_name, quantity, unit_price, reorder_level, category } = req.body;
 
   try {
-    console.log({item_name, quantity, unit_price, reorder_level, special_notes, category});
+    console.log({item_name, quantity, unit_price, reorder_level, category});
 
     await db.promise().query(
-      `INSERT INTO inventory (item_name, quantity, unit_price, reorder_level, special_notes, category) 
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [item_name, quantity, unit_price, reorder_level, special_notes, category]
+      `INSERT INTO inventory (item_name, quantity, unit_price, reorder_level, category) 
+       VALUES (?, ?, ?, ?, ?)`,
+      [item_name, quantity, unit_price, reorder_level, category]
     );
 
     res.status(201).json({ message: 'Item added successfully!' });
@@ -143,20 +143,18 @@ module.exports.addItem = async (req, res) => {
 // Item details update
 module.exports.updateItemDetails = async (req, res) => {
   const { id } = req.params;
-  const { quantity, unit_price, reorder_level, special_notes } = req.body;
+  const { quantity, unit_price, reorder_level } = req.body;
 
   const updateQuery = `
     UPDATE inventory 
     SET 
       quantity = ?, 
       unit_price = ?, 
-      reorder_level = ?, 
-      special_notes = ?, 
-      updated_at = CURRENT_TIMESTAMP
+      reorder_level = ?
     WHERE id = ?
   `;
 
-  db.query(updateQuery, [quantity, unit_price, reorder_level, special_notes, id], (error, result) => {
+  db.query(updateQuery, [quantity, unit_price, reorder_level, id], (error, result) => {
     if (error) {
       console.error('Error updating item:', error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -164,7 +162,8 @@ module.exports.updateItemDetails = async (req, res) => {
 
     if (result.affectedRows > 0) {
       return res.status(200).json({ message: 'Item updated successfully' });
-    } else {
+    } 
+    else {
       return res.status(404).json({ message: 'Item not found' });
     }
   });
@@ -184,12 +183,15 @@ module.exports.deleteItem = async (req, res) => {
 
     if (result.affectedRows > 0) {
       return res.status(200).json({ message: 'Item deleted successfully' });
-    } else {
+    } 
+    else {
       return res.status(404).json({ message: 'Item not found' });
     }
   });
 };
 
+
+// MENU CONTROLLERS
 // Fetch all menu items
 exports.getMenuItems = async (_req, res) => {
   try {
@@ -209,17 +211,18 @@ exports.getMenuItems = async (_req, res) => {
 
 // Add a new menu item
 exports.addMenuItem = async (req, res) => {
-  const { item_name, description, price, category } = req.body;
+  const { item_name, price, category } = req.body;
 
   try {
     await db.promise().query(
-      `INSERT INTO menu (item_name, description, price, category) 
-       VALUES (?, ?, ?, ?)`,
-      [item_name, description, price, category]
+      `INSERT INTO menu (item_name, price, category) 
+       VALUES (?, ?, ?)`,
+      [item_name, price, category]
     );
 
     res.status(201).json({ message: 'Menu item added successfully!' });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error adding menu item:', error);
     res.status(500).json({ message: 'Failed to add menu item.' });
   }
@@ -228,20 +231,18 @@ exports.addMenuItem = async (req, res) => {
 // Update a menu item
 exports.updateMenuItem = async (req, res) => {
   const { id } = req.params;
-  const { item_name, description, price, category } = req.body;
+  const { item_name, price, category } = req.body;
 
   const updateQuery = `
     UPDATE menu 
     SET 
       item_name = ?, 
-      description = ?, 
       price = ?, 
-      category = ?,
-      updated_at = CURRENT_TIMESTAMP
+      category = ?
     WHERE id = ?
   `;
 
-  db.query(updateQuery, [item_name, description, price, category, id], (error, result) => {
+  db.query(updateQuery, [item_name, price, category, id], (error, result) => {
     if (error) {
       console.error('Error updating menu item:', error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -249,7 +250,8 @@ exports.updateMenuItem = async (req, res) => {
 
     if (result.affectedRows > 0) {
       return res.status(200).json({ message: 'Menu item updated successfully' });
-    } else {
+    } 
+    else {
       return res.status(404).json({ message: 'Menu item not found' });
     }
   });
@@ -269,7 +271,8 @@ exports.deleteMenuItem = async (req, res) => {
 
     if (result.affectedRows > 0) {
       return res.status(200).json({ message: 'Menu item deleted successfully' });
-    } else {
+    } 
+    else {
       return res.status(404).json({ message: 'Menu item not found' });
     }
   });
@@ -298,7 +301,6 @@ module.exports.fetchItemDetails = async (req, res) => {
     res.json({
       id: item.id,
       item_name: item.item_name,
-      description: item.description,
       price: item.price,
       category: item.category
     });
@@ -307,82 +309,78 @@ module.exports.fetchItemDetails = async (req, res) => {
 
 // Order placement
 module.exports.placeOrder = [authenticateUser, async (req, res) => {
-    const { orderItems, paymentMethod } = req.body;
+  const { orderItems, paymentMethod, totalPrice } = req.body;
 
-    // Validate incoming data
-    if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
-      return res.status(400).json({ error: 'No order items provided' });
-    }
-
-    try {
-      const userId = req.userId; // Get the authenticated user's ID
-
-      // Calculate the total price from the order items
-      let totalPrice = 0;
-      const orderItemsData = [];
-
-      for (const item of orderItems) {
-        const { itemName, price, quantity } = item;
-
-        if (isNaN(price) || isNaN(quantity) || quantity <= 0) {
-          return res.status(400).json({ error: 'Invalid item price or quantity' });
-        }
-
-        if (price < 0) {
-          return res.status(400).json({ error: 'Price cannot be negative' });
-        }
-
-        totalPrice += price * quantity;
-
-        const cleanedItemName = itemName.replace(/:$/, '').trim();
-        const [menuItem] = await db.promise().query('SELECT id FROM menu WHERE item_name = ?', [cleanedItemName]);
-        const menuId = menuItem[0]?.id;
-
-        if (!menuId) {
-          return res.status(400).json({ error: `Menu item not found for ${cleanedItemName}` });
-        }
-
-        orderItemsData.push([null, menuId, quantity, price]); 
-      }
-
-      if (isNaN(totalPrice)) {
-        return res.status(400).json({ error: 'Total price calculation failed' });
-      }
-
-      const orderQuery = `
-        INSERT INTO orders (order_number, user_id, total_price, payment_method, status, created_at) 
-        VALUES (?, ?, ?, ?, ?, NOW())`;
-
-      const [orderResult] = await db.promise().query(orderQuery, [
-        generateOrderNumber(),
-        userId,
-        totalPrice.toFixed(2),
-        paymentMethod,
-        'pending',
-      ]);
-
-      const orderId = orderResult.insertId;
-
-      const itemsQuery = `
-        INSERT INTO order_items (order_id, menu_id, quantity, unit_price)
-        VALUES ?`;
-
-      const itemsWithOrderId = orderItemsData.map(item => [orderId, ...item.slice(1)]);
-      await db.promise().query(itemsQuery, [itemsWithOrderId]);
-
-      res.status(201).json({ message: 'Order placed successfully', orderId });
-    } catch (error) {
-      console.error('Error placing order:', error);
-      res.status(500).json({ error: 'Failed to place order' });
-    }
-
+  // Validate incoming data
+  if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
+    return res.status(400).json({ error: 'No order items provided' });
   }
+
+  if (isNaN(totalPrice) || totalPrice <= 0) {
+    return res.status(400).json({ error: 'Invalid total price' });
+  }
+
+  try {
+    const userId = req.userId; // Get the authenticated user's ID
+
+    const orderItemsData = [];
+    for (const item of orderItems) {
+      const { itemName, price, quantity } = item;
+
+      if (isNaN(price) || isNaN(quantity) || quantity <= 0) {
+        return res.status(400).json({ error: 'Invalid item price or quantity' });
+      }
+
+      if (price < 0) {
+        return res.status(400).json({ error: 'Price cannot be negative' });
+      }
+
+      const cleanedItemName = itemName.replace(/:$/, '').trim();
+      const [menuItem] = await db.promise().query('SELECT id FROM menu WHERE item_name = ?', [cleanedItemName]);
+      const menuId = menuItem[0]?.id;
+
+      if (!menuId) {
+        return res.status(400).json({ error: `Menu item not found for ${cleanedItemName}` });
+      }
+
+      orderItemsData.push([null, menuId, quantity, price]); 
+    }
+
+    const orderQuery = `
+      INSERT INTO orders (order_number, user_id, total_price, payment_method, status, created_at) 
+      VALUES (?, ?, ?, ?, ?, NOW())`;
+
+    const [orderResult] = await db.promise().query(orderQuery, [
+      generateOrderNumber(),
+      userId,
+      totalPrice, // Use the total price directly
+      paymentMethod,
+      'pending',
+    ]);
+
+    const orderId = orderResult.insertId;
+
+    const itemsQuery = `
+      INSERT INTO order_items (order_id, menu_id, quantity, unit_price)
+      VALUES ?`;
+
+    const itemsWithOrderId = orderItemsData.map(item => [orderId, ...item.slice(1)]);
+    await db.promise().query(itemsQuery, [itemsWithOrderId]);
+
+    res.status(201).json({ message: 'Order placed successfully', orderId });
+  } catch (error) {
+    console.error('Error placing order:', error);
+    res.status(500).json({ error: 'Failed to place order' });
+  }
+
+}
 ];
 
 // Helper function to generate a unique order number
 function generateOrderNumber() {
   return `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 }
+
 
 
 module.exports.fetchOrders = async (req, res) => {
@@ -409,8 +407,7 @@ module.exports.updateOrderStatus = async (req, res) => {
   const updateQuery = `
     UPDATE orders 
     SET 
-      status = ?, 
-      updated_at = CURRENT_TIMESTAMP
+      status = ?
     WHERE id = ?
   `;
 
@@ -443,7 +440,6 @@ module.exports.getReceipt = async (req, res) => {
           o.total_price, 
           o.payment_method, 
           o.status, 
-          o.updated_at, 
           c.name AS cashier_name 
         FROM orders o
         JOIN users c ON o.user_id = c.id
@@ -490,7 +486,7 @@ module.exports.getReceipt = async (req, res) => {
       total_price: order.total_price,
       payment_method: order.payment_method,
       status: order.status,
-      updated_at: order.updated_at,
+      created_at: order.created_at,
       cashier_name: order.cashier_name,
       order_items: itemsRows // Array of items
     });
@@ -501,6 +497,8 @@ module.exports.getReceipt = async (req, res) => {
   }
 };
 
+
+// Accounts controllers
 // Get paginated users
 exports.getPaginatedUsers = async (req, res) => {
   const page = parseInt(req.query.page) || 1;

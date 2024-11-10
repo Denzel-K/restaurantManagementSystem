@@ -63,13 +63,13 @@ app.use(cookie_parser());
 app.use(authRoutes);
 
 // Check if the database and tables exist, and set them up if necessary
-setupDatabase()
-  .then(() => {
-    console.log('Database and tables checked/initialized successfully.');
-  })
-  .catch(err => {
-    console.error('Error during database setup:', err);
-  });
+// setupDatabase()
+//   .then(() => {
+//     console.log('Database and tables checked/initialized successfully.');
+//   })
+//   .catch(err => {
+//     console.error('Error during database setup:', err);
+//   });
 
 // Server setup
 const PORT = process.env.PORT || 8080;

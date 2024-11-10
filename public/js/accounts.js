@@ -10,7 +10,7 @@ async function fetchUsers(page) {
 
 function renderTable(users) {
   const tableBody = document.getElementById("userAccountsBody");
-  tableBody.innerHTML = ''; // Clear existing rows
+  tableBody.innerHTML = '';
 
   users.forEach(user => {
     const row = document.createElement("tr");
@@ -21,7 +21,6 @@ function renderTable(users) {
       <td data-label="Role ID">${user.role_id}</td>
       <td data-label="Phone">${user.phone}</td>
       <td data-label="Created At">${new Date(user.created_at).toLocaleString()}</td>
-      <td data-label="Updated At">${new Date(user.updated_at).toLocaleString()}</td>
       <td data-label="Actions">
         <div class="accountsActionBtns">
           <button class="edit-btn" data-id="${user.id}">Edit</button>
@@ -77,11 +76,11 @@ function handleEdit(event) {
 
 function handleDelete(event) {
   const userId = event.target.getAttribute("data-id");
+
   if (confirm("Are you sure you want to delete this user?")) {
     deleteUser(userId);
   }
 }
-
 
 async function loadUserDetails(userId) {
   const response = await fetch(`/api/users/${userId}`);
@@ -121,7 +120,6 @@ async function deleteUser(userId) {
   await fetch(`/api/users/${userId}`, { method: "DELETE" });
   location.reload();
 }
-
 
 // Initial fetch
 fetchUsers(currentPage);

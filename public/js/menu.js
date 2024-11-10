@@ -58,7 +58,6 @@
       row.innerHTML = `
         <td data-label="ID">${item.id}</td>
         <td data-label="Item Name">${item.item_name}</td>
-        <td data-label="Description">${item.description}</td>
         <td data-label="Price">${item.price}</td>
         <td data-label="Category">${item.category}</td>
         ${userRoleId !== 4 ? `
@@ -222,7 +221,6 @@
       document.getElementById("menu-item-id").value = item.id;
       document.getElementById("menu-item-name").innerText = item.item_name;
       document.getElementById("menu-item-category").innerText = item.category;
-      document.getElementById("menu-item-description").value = item.description;
       document.getElementById("menu-item-price").value = item.price;
 
       document.querySelector(".menu-item-details").style.display = "block";
@@ -275,7 +273,6 @@
     const formData = new FormData(e.target);
     const newItem = {
       item_name: formData.get("menu-item-name"),
-      description: formData.get("menu-item-description"),
       price: parseFloat(formData.get("menu-item-price")),
       category: formData.get("menu-item-category"),
     };
@@ -287,10 +284,10 @@
   // Event listener for updating a menu item
   document.getElementById("update-menu-item").addEventListener("click", async () => {
     const id = document.getElementById("menu-item-id").value;
+
     const updatedItem = {
       id: id,
       item_name: document.getElementById("menu-item-name").innerText,
-      description: document.getElementById("menu-item-description").value,
       price: parseFloat(document.getElementById("menu-item-price").value),
       category: document.getElementById("menu-item-category").innerText,
     };
@@ -311,7 +308,8 @@
         fetchMenuItems(); // Refresh the menu items
         document.querySelector(".menu-item-details").style.display = "none";
         document.querySelector(".menu-stock").style.display = "block";
-      } else {
+      } 
+      else {
         console.error("Failed to update menu item");
       }
     } catch (error) {
@@ -354,49 +352,7 @@
   
     // Make 'Process' button visible
     document.querySelector('.processOrderBox').style.display = 'block';
-  }
-
-  // Initiate order
-  // document.querySelector('.newOrder').addEventListener('click', () => {
-  //   // Enable all order buttons
-  //   isOrderInitiated = true;
-  //   initiateOrderPlacement();
-
-  //   const orderButtons = document.querySelectorAll('.make-order');
-
-  //   orderButtons.forEach(button => {      
-  //     // Handle 'Make Order' button clicks
-  //     button.addEventListener('click', async () => {
-  //       const itemId = button.dataset.id;
-
-  //       // Fetch item details based on itemId
-  //       const itemDetails = await fetchItemDetails(itemId);
-        
-  //       if (!itemDetails) {
-  //         alert('Error fetching item details.');
-  //         return;
-  //       }
-
-  //       console.log("Item added to draft.");
-
-  //       // Add item details to orderItems array if not already present
-  //       console.log('orderItems: ', orderItems);
-
-  //       if (!orderItems.some(orderItem => orderItem.id === itemId)) {
-  //         orderItems.push({
-  //           id: itemDetails.id,
-  //           name: itemDetails.item_name,
-  //           description: itemDetails.description,
-  //           price: itemDetails.price,
-  //           category: itemDetails.category,
-  //           quantity: 1
-  //         });
-  //       }
-
-  //       console.log('orderItems: ', orderItems);
-  //     });
-  //   });
-  // });
+  };
 
   // Fetch item details from server
   async function fetchItemDetails(itemId) {
@@ -426,7 +382,6 @@
       const itemHTML = `
         <div class="order-item" data-index="${index}">
           <p><strong>Item Name:</strong> ${item.name}</p>
-          <p><strong>Description:</strong> ${item.description}</p>
           <p><strong>Price:</strong> ${item.price}</p>
           <p><strong>Category:</strong> ${item.category}</p>
           <label for="quantity-${index}">Quantity:</label>
@@ -434,6 +389,7 @@
           <button type="button" class="remove-item" data-index="${index}">Remove</button>
         </div>
       `;
+
       itemContainer.innerHTML += itemHTML;
     });
 
@@ -464,13 +420,12 @@
   const processOrder = document.querySelector('.processOrderBox button');
 
   processOrder.addEventListener('click', () => {
-    //const selectedItems = document.querySelectorAll('#menu-table-body tr.selected');
     const orderContainer = document.querySelector('.orderContainer .order-items');
     document.querySelector('.menu-stock').style.display = 'none';
     processOrder.style.display = 'none';
 
     // Clear previous order items
-    //orderContainer.innerHTML = '';
+    orderContainer.innerHTML = '';
 
     // Add selected items to the order container
     orderItems.forEach(item => {
@@ -480,42 +435,18 @@
       const orderItem = `
         <div class="order-item">
           <div class="orderItemDetails">
-            <p><strong>${itemName}:</strong> $<span class="item-price">${itemPrice.toFixed(2)}</span></p>
+            <p><strong>${itemName}:</strong> <span style="font-weight: 500;">KES </span><span class="item-price">${itemPrice.toFixed(2)}</span></p>
             <div class="quantityField">
               <label for="quantity-${itemName}">Quantity:</label>
               <input type="number" class="quantity-input" id="quantity-${itemName}" name="quantity-${itemName}" value="1" min="1" />
             </div>
           </div>
-          
           <button class="remove-item">Remove</button>
         </div>
       `;
 
       orderContainer.innerHTML += orderItem;
-    })
-
-    // selectedItems.forEach(item => {
-      
-
-    //   const itemName = item.querySelector('td:nth-child(2)').textContent;
-    //   const itemPrice = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace(/[^0-9.-]+/g,"")); // Ensure price is a number
-
-    //   const orderItem = `
-    //     <div class="order-item">
-    //       <div class="orderItemDetails">
-    //         <p><strong>${itemName}:</strong> $<span class="item-price">${itemPrice.toFixed(2)}</span></p>
-    //         <div class="quantityField">
-    //           <label for="quantity-${itemName}">Quantity:</label>
-    //           <input type="number" class="quantity-input" id="quantity-${itemName}" name="quantity-${itemName}" value="1" min="1" />
-    //         </div>
-    //       </div>
-          
-    //       <button class="remove-item">Remove</button>
-    //     </div>
-    //   `;
-
-    //   orderContainer.innerHTML += orderItem;
-    // });
+    });
 
     // Show the order container
     document.querySelector('.orderContainer').style.display = 'block';
@@ -555,19 +486,19 @@
   function updateTotalAmount() {
     const orderItems = document.querySelectorAll('.order-item');
     let total = 0;
-
+  
     orderItems.forEach(item => {
       const priceElement = item.querySelector('.item-price');
       const quantityInput = item.querySelector('.quantity-input');
-
+  
       const price = parseFloat(priceElement.textContent);
       const quantity = parseInt(quantityInput.value, 10);
-
+  
       total += price * quantity; // Calculate total
     });
-
+  
     // Update the total amount displayed
-    document.querySelector('.totalAmount').textContent = `$${total.toFixed(2)}`;
+    document.querySelector('.totalAmount').textContent = `KES ${total.toFixed(2)}`;
   }
 
   // Back to menu from order processing
@@ -583,15 +514,13 @@
   
     // Collect the order items
     let orderItems = [];
-
+    let totalPrice = 0;
+  
     document.querySelectorAll('.order-item').forEach(orderItem => {
       const itemName = orderItem.querySelector('strong').textContent;
-      
-      // Use a more specific selector for price if possible
       const priceElement = orderItem.querySelector('p:nth-child(1)');
       const quantityInput = orderItem.querySelector('input[type="number"]');
       
-      // Ensure priceElement exists before accessing textContent
       if (!priceElement) {
         console.error('Price element not found for item:', itemName);
         return; 
@@ -599,9 +528,8 @@
   
       const priceText = priceElement.textContent;
       const quantity = parseInt(quantityInput.value, 10);
-      
-      // Parse price from the string (e.g., "$12.34" to 12.34)
-      const price = parseFloat(priceText.replace(/[^0-9.-]+/g,"")); // This regex removes any non-numeric characters
+  
+      const price = parseFloat(priceText.replace(/[^0-9.-]+/g,"")); // Parse price
   
       if (quantity > 0) {
         orderItems.push({
@@ -609,10 +537,11 @@
           price,   
           quantity
         });
+  
+        totalPrice += price * quantity; // Add to total
       }
     });
   
-    // Check if there are any order items
     if (orderItems.length === 0) {
       alert('Please select at least one item with a valid quantity.');
       return;
@@ -628,7 +557,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ orderItems, paymentMethod }),
+        body: JSON.stringify({ orderItems, paymentMethod, totalPrice: totalPrice.toFixed(2) }), // Send total price
       });
   
       if (response.ok) {

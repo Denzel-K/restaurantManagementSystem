@@ -130,9 +130,7 @@ function showItemDetails(itemId) {
     document.getElementById('item-quantity').value = item.quantity;
     document.getElementById('item-unit-price').value = item.unit_price;
     document.getElementById('item-reorder-level').value = item.reorder_level;
-    document.getElementById('item-notes').value = item.special_notes || '';
     document.getElementById('item-created-at').textContent = formatDate(item.created_at);
-    document.getElementById('item-updated-at').textContent = formatDate(item.updated_at);
 
     // Update item
     document.getElementById('update-item').onclick = async () => {
@@ -140,7 +138,6 @@ function showItemDetails(itemId) {
         quantity: document.getElementById('item-quantity').value,
         unit_price: document.getElementById('item-unit-price').value,
         reorder_level: document.getElementById('item-reorder-level').value,
-        special_notes: document.getElementById('item-notes').value,
       };
 
       try {
@@ -261,8 +258,7 @@ document.getElementById('add-item-form').onsubmit = async (event) => {
     category: document.getElementById('category').value,
     quantity: document.getElementById('quantity').value,
     unit_price: document.getElementById('unit-price').value,
-    reorder_level: document.getElementById('reorder-level').value,
-    special_notes: document.getElementById('special-notes').value,
+    reorder_level: document.getElementById('reorder-level').value
   };
 
   console.log(newItem);
@@ -287,7 +283,6 @@ const loadItemDetails = (item) => {
   document.getElementById('item-name').textContent = item.name;
   document.getElementById('item-category').textContent = item.category;
   document.getElementById('item-created-at').textContent = item.created_at;
-  document.getElementById('item-updated-at').textContent = item.updated_at;
   document.getElementById('item-quantity').value = item.quantity;
   document.getElementById('item-unit-price').value = item.unit_price;
   document.getElementById('item-reorder-level').value = item.reorder_level;

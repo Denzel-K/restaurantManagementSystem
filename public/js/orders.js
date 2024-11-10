@@ -74,14 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td data-label="ID">${order.id}</td>
         <td data-label="Order Number">${order.order_number}</td>
-        <td data-label="Total Price">$${order.total_price}</td>
+        <td data-label="Total Price">${order.total_price}</td>
         <td data-label="Payment Method">${order.payment_method}</td>
         <td data-label="Status">${order.status}</td>
         <td data-label="Created At">${new Date(order.created_at).toLocaleString()}</td>
         ${userRoleId !== 4 ? `
           <td class="orderActions" data-label="Actions">
             <div class="actionBtnBox">
-              <button class="view-order orderActioBtn" data-id="${order.id}">Edit</button>
+              <button class="view-order orderActioBtn" data-id="${order.id}">View</button>
               <button class="orderReceiptView" data-id="${order.id}">Receipt</button>
             </div>
           </td>
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Status:</strong> ${order.status}</p>
           <p><strong>Date:</strong> ${order.created_at}</p>
           <hr>
-          <button class="printReceiptBtn" data-id="${order.id}">Print Receipt</button>
+          <button class="printReceiptBtn" data-id="${order.id}">Download Receipt</button>
         </div>
 
         <button class="closeReceiptBtn" data-id="${order.id}">Close</button>
@@ -178,13 +178,13 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="orderItemsInfo">
               <h4>Order Items</h4>
               <ul>${data.order_items.map(item => 
-                `<li>${item.name} (Qty: ${item.quantity}, Price: $${item.price})</li>`).join('')}
+                `<li>${item.name} (Qty: ${item.quantity}, Price: KES ${item.price})</li>`).join('')}
               </ul>
-              <p><strong>Total Price:</strong> $${data.total_price}</p>
+              <p><strong>Total Price:</strong> KES ${data.total_price}</p>
             </div>
             <p><strong>Payment Method:</strong> ${data.payment_method}</p>
             <p><strong>Status:</strong> ${data.status}</p>
-            <p><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
+            <p><strong>Date:</strong> ${new Date(data.created_at).toLocaleString()}</p>
             <p><strong>Cashier:</strong> ${data.cashier_name}</p>
             <hr>
             <button class="printReceiptBtn" data-id="${orderId}">Download Receipt</button>
@@ -222,13 +222,13 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="orderItemsInfo" style="margin: 1rem 0; border: 1.5px solid rgb(207, 207, 207); border-radius: 4px; padding: .8rem .65rem; width: 100%;">
             <h4 style="text-align: left; font-size: 1rem; color: rgb(54, 53, 53);">Order Items</h4>
             <ul style="margin-top: .5rem;">
-              ${data.order_items.map(item => `<li style="margin: .85rem 0 .85rem 1rem; font-size: 12px;">${item.name} (Qty: ${item.quantity}, Price: $${item.price})</li>`).join('')}
+              ${data.order_items.map(item => `<li style="margin: .85rem 0 .85rem 1rem; font-size: 12px;">${item.name} (Qty: ${item.quantity}, Price: KES ${item.price})</li>`).join('')}
             </ul>
-            <p style="opacity: .8; margin: .5rem 0 0 0;"><strong>Total Price:</strong> $${data.total_price}</p>
+            <p style="opacity: .8; margin: .5rem 0 0 0;"><strong>Total Price:</strong> KES ${data.total_price}</p>
           </div>
           <p style="margin: .65rem 0; opacity: 9;"><strong>Payment Method:</strong> ${data.payment_method}</p>
           <p style="margin: .65rem 0; opacity: 9;"><strong>Status:</strong> ${data.status}</p>
-          <p style="margin: .65rem 0; opacity: 9;"><strong>Date:</strong> ${new Date(data.updated_at).toLocaleString()}</p>
+          <p style="margin: .65rem 0; opacity: 9;"><strong>Date:</strong> ${new Date(data.created_at).toLocaleString()}</p>
           <p style="margin: .65rem 0; opacity: 9;"><strong>Cashier:</strong> ${data.cashier_name}</p>
           <hr style="margin: 2rem 0 1rem 0;">
           <p style="text-align: center; font-weight: bold; font-family: 'Arial', sans-serif;">Thank you for your order!</p>
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <h3>Order Details</h3>
       <p><strong>Order Number:</strong> ${order.order_number}</p>
-      <p><strong>Total Price:</strong> $${order.total_price}</p>
+      <p><strong>Total Price:</strong> KES ${order.total_price}</p>
       <p><strong>Payment Method:</strong> ${order.payment_method}</p>
       <p><strong>Status:</strong> ${order.status}</p>
       <p><strong>Created At:</strong> ${new Date(order.created_at).toLocaleString()}</p>

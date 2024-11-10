@@ -26,7 +26,7 @@
                   <th>ID</th>
                   <th>Item Name</th>
                   <th>Quantity</th>
-                  <th>Unit Price</th>
+                  <th>Unit Price (KSH)</th>
                   <th>Reorder Level</th>
                   <th class="action_col_head">Action</th>
                 </tr>
@@ -53,7 +53,6 @@
             <p><strong>Item Name:</strong> <span id="item-name"></span></p>
             <p><strong>Category:</strong> <span id="item-category"></span></p>
             <p><strong>Created At:</strong> <span id="item-created-at"></span></p>
-            <p><strong>Updated At:</strong> <span id="item-updated-at"></span></p>
 
             <label for="item-quantity"><strong>Quantity Available:</strong></label>
             <input type="number" id="item-quantity" name="quantity" min="0" />
@@ -63,9 +62,6 @@
 
             <label for="item-reorder-level"><strong>Reorder Level:</strong></label>
             <input type="number" id="item-reorder-level" name="reorder_level" min="0" />
-
-            <label for="item-notes"><strong>Special Notes:</strong></label>
-            <textarea id="item-notes" name="special_notes" rows="3"></textarea>
 
             <div class="modifyActions">
               <button type="button" id="update-item">Update</button>
@@ -95,10 +91,6 @@
 
               <label for="reorder-level">Reorder Level:</label>
               <input type="number" id="reorder-level" name="reorder-level" min="0" required />
-
-              <label for="special-notes">Special Notes:</label>
-              <textarea id="special-notes" name="special-notes" rows="4"></textarea>
-
 
               <div class="addActions">
                 <button type="submit" id="submit-item">Add Item</button>
