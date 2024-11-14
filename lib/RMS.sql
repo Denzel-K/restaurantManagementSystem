@@ -1,8 +1,8 @@
 -- Create the restaurant-management database
-CREATE DATABASE IF NOT EXISTS `restaurant_management`;
+CREATE DATABASE IF NOT EXISTS `sql7743204`;
 
 -- Use the created database
-USE `restaurant_management`;
+USE `sql7743204`;
 
 -- Create a roles table (to define different access levels)
 CREATE TABLE IF NOT EXISTS `roles` (
