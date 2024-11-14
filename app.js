@@ -62,18 +62,20 @@ app.use(cors());
 app.use(cookie_parser()); 
 app.use(authRoutes);
 
-// Check if the database and tables exist, and set them up if necessary
-setupDatabase()
-  .then(() => {
-    console.log('Database and tables checked/initialized successfully.');
+// Check if the database is connected, then start the server
+const startServer = async () => {
+  try {
+    await setupDatabase(); // Wait for the database connection
+    console.log("Database connected successfully.");
 
-    // Server setup
     const PORT = process.env.PORT || 8080;
-
-    app.listen(PORT, "0.0.0.0", () => {
+    app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
-  })
-  .catch(err => {
-    console.error('Error during database setup:', err);
-  });
+  } catch (err) {
+    console.error("Error connecting to the database:", err);
+    process.exit(1); // Exit if database connection fails
+  }
+};
+
+startServer();
