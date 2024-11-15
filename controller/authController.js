@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 const { authenticateUser } = require('../middleware/authMiddleware');
 dotenv.config();
 
-const secretKey = process.env.JWT_SECRET;
+const secretKey = 'wozawoza';
 const maxAge = 3 * 24 * 60 * 60;
 
 const db = mysql.createPool({
