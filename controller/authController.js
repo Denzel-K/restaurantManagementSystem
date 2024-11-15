@@ -9,11 +9,12 @@ const secretKey = process.env.JWT_SECRET;
 const maxAge = 3 * 24 * 60 * 60;
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME, 
-  multipleStatements: true 
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  port: process.env.MYSQLPORT || 3306,
+  database: process.env.MYSQLDATABASE,
+  multipleStatements: true
 });
 
 // Register new user

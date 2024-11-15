@@ -53,6 +53,7 @@ app.engine('.hbs', handlebars.engine);
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+
 // Middleware
 app.use(morgan("dev"));
 app.use(express.json()); 
@@ -61,6 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(cookie_parser()); 
 app.use(authRoutes);
+
 
 // Check if the database is connected, then start the server
 const startServer = async () => {
