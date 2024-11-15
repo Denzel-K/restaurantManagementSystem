@@ -9,11 +9,11 @@ const secretKey = process.env.JWT_SECRET;
 const maxAge = 3 * 24 * 60 * 60;
 
 const db = mysql.createPool({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  port: process.env.MYSQLPORT || 3306,
-  database: process.env.MYSQLDATABASE,
+  host: 'autorack.proxy.rlwy.net',
+  user: 'root',
+  password: 'yqLEduFVqYhjATWseWguklMZBOPLiIsV',
+  port: 3306,
+  database: 'railway',
   multipleStatements: true
 });
 

@@ -71,10 +71,11 @@ const startServer = async () => {
     console.log("Database connected successfully.");
 
     const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error("Error connecting to the database:", err);
     process.exit(1); // Exit if database connection fails
   }
