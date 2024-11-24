@@ -9,7 +9,7 @@ const secretKey = 'wozawoza';
 const maxAge = 3 * 24 * 60 * 60;
 
 const db = mysql.createPool({
-  host: 'junction.proxy.rlwy.net:48178',
+  host: 'mysql.railway.internal',
   user: 'root',
   password: 'AKbEJgeuqJPSOSnxXeDIMzlMKnOHYFGp',
   port: 3306,
