@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
-const secretKey = 'wozawoza';
+const secretKey = 'scrt123';
 
 exports.authMiddleware = (req, res, next) => {
   const token = req.cookies.jwt;
