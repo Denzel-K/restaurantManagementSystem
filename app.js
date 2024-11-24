@@ -60,7 +60,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: 'https://restaurantmanagementsystem-production.up.railway.app',
+  origin: 'https://restaurantmanagementsystem-production-8958.up.railway.app',
   methods: ['GET', 'POST'],
   credentials: true
 }));
