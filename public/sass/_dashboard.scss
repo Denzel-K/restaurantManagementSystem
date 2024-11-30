@@ -203,7 +203,8 @@
         span{
           font-weight: 600;
           font-size: 1.05rem;
-          margin-left: .55rem;
+          margin-left: .05rem;
+          margin-bottom: -2px;
 
           @media(max-width: 600px){
             font-size: 1rem;

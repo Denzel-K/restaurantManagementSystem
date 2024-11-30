@@ -570,7 +570,8 @@ body {
 .dashContainer .dashBody .dashHead .profileBox span {
   font-weight: 600;
   font-size: 1.05rem;
-  margin-left: 0.55rem;
+  margin-left: 0.05rem;
+  margin-bottom: -2px;
 }
 @media (max-width: 600px) {
   .dashContainer .dashBody .dashHead .profileBox span {

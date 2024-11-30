@@ -1,8 +1,8 @@
 -- Create the restaurant-management database
-CREATE DATABASE IF NOT EXISTS `sql7743204`;
+CREATE DATABASE IF NOT EXISTS `restaurant_management`;
 
 -- Use the created database
-USE `sql7743204`;
+USE `restaurant_management`;
 
 -- Create a roles table (to define different access levels)
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `order_number` VARCHAR(50) NOT NULL,
   `user_id` INT, -- cashier/user who created the order
   `total_price` DECIMAL(10, 2) NOT NULL,
-  `payment_method` ENUM('cash', 'card', 'mobile') NOT NULL,
+  `payment_method` ENUM('Not Selected', 'cash', 'card', 'mobile') NOT NULL,
   `status` ENUM('pending', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)

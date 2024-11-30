@@ -547,9 +547,6 @@
       return;
     }
   
-    // Collect the selected payment method
-    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-  
     // Send order details to the server
     try {
       const response = await fetch('/api/orders', {
@@ -557,7 +554,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ orderItems, paymentMethod, totalPrice: totalPrice.toFixed(2) }), // Send total price
+        body: JSON.stringify({ orderItems, totalPrice: totalPrice.toFixed(2) }), // Send total price
       });
   
       if (response.ok) {

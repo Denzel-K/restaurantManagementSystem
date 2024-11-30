@@ -285,6 +285,22 @@ document.addEventListener("DOMContentLoaded", () => {
       <p><strong>Status:</strong> ${order.status}</p>
       <p><strong>Created At:</strong> ${new Date(order.created_at).toLocaleString()}</p>
 
+      <div class="payment-method">
+        <p><strong>Select Payment Method:</strong></p>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="cash" ${order.payment_method === 'cash' ? 'checked' : ''} required> Cash
+        </label>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="card" ${order.payment_method === 'card' ? 'checked' : ''} required> Card
+        </label>
+
+        <label>
+          <input type="radio" name="paymentMethod" value="mobile" ${order.payment_method === 'mobile' ? 'checked' : ''} required> Mobile
+        </label>
+      </div>
+
       <div class="satusUpdateBox">
         <label for="status">Status:</label>
         <div>
@@ -310,14 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to update order status
   const updateOrderStatus = async (orderId) => {
     const selectedStatus = document.querySelector('input[name="status"]:checked').value;
-
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+  
     try {
       const response = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: selectedStatus }),
+        body: JSON.stringify({ status: selectedStatus, paymentMethod }),
       });
 
       if (response.ok) {

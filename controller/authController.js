@@ -17,6 +17,16 @@ const db = mysql.createPool({
   multipleStatements: true
 });
 
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '#Secure1234',
+//   port: 3306,
+//   database: 'restaurant_management',
+//   multipleStatements: true
+// });
+
+
 // Register new user
 exports.registerUser = async (req, res) => {
   const { name, email, phone, password } = req.body;
@@ -310,7 +320,7 @@ module.exports.fetchItemDetails = async (req, res) => {
 
 // Order placement
 module.exports.placeOrder = [authenticateUser, async (req, res) => {
-  const { orderItems, paymentMethod, totalPrice } = req.body;
+  const { orderItems, totalPrice } = req.body;
 
   // Validate incoming data
   if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
@@ -348,14 +358,13 @@ module.exports.placeOrder = [authenticateUser, async (req, res) => {
     }
 
     const orderQuery = `
-      INSERT INTO orders (order_number, user_id, total_price, payment_method, status, created_at) 
-      VALUES (?, ?, ?, ?, ?, NOW())`;
+      INSERT INTO orders (order_number, user_id, total_price, status, created_at) 
+      VALUES (?, ?, ?, ?, NOW())`;
 
     const [orderResult] = await db.promise().query(orderQuery, [
       generateOrderNumber(),
       userId,
       totalPrice, // Use the total price directly
-      paymentMethod,
       'pending',
     ]);
 
@@ -403,16 +412,17 @@ module.exports.fetchOrders = async (req, res) => {
 
 module.exports.updateOrderStatus = async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, paymentMethod } = req.body;
 
   const updateQuery = `
     UPDATE orders 
     SET 
-      status = ?
+      status = ?,
+      payment_method = ?
     WHERE id = ?
   `;
 
-  db.query(updateQuery, [status, id], (error, result) => {
+  db.query(updateQuery, [status, paymentMethod, id], (error, result) => {
     if (error) {
       console.error('Error updating order status:', error);
       return res.status(500).json({ message: 'Internal server error' });
@@ -440,7 +450,8 @@ module.exports.getReceipt = async (req, res) => {
           o.order_number, 
           o.total_price, 
           o.payment_method, 
-          o.status, 
+          o.status,
+          o.created_at,
           c.name AS cashier_name 
         FROM orders o
         JOIN users c ON o.user_id = c.id
